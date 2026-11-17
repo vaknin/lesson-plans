@@ -343,6 +343,10 @@ svg{display:block}
 .kbd{display:inline-block;min-width:1.6em;padding:0 .4em;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 2px var(--line2);text-align:center;font-weight:600;color:var(--ink)}
 #legend{position:fixed;left:12px;bottom:6px;z-index:6;display:flex;gap:14px;font-size:13px;color:var(--ink2);opacity:.6;pointer-events:none}
 #legend .kbd{font-size:12px;padding:0 .35em;margin-right:.2em}
+#legend .off{opacity:.4;text-decoration:line-through}
+#legend.nudge{opacity:1;animation:nudge .45s}
+#legend .hot .kbd{background:var(--gold)}
+@keyframes nudge{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:35}
 </style>
 </head>
@@ -902,8 +906,9 @@ function sssFly(from, n = 1) {
 }
 
 /* =====================================================================
-   GAMES – each returns { keys, onKey(key) → true when it used the key, stop() }
-   The arrows move through a stage's items; past the ends they change the stage.
+   GAMES – each returns { keys() → [[key, what the next press does, usable now]], onKey(key) → true when it acted, stop() }
+   Space = the next step on this screen; → / ← = next / previous item, never past the stage's ends;
+   letters are lower-cased before onKey. A press that can't act flashes the key legend.
    ===================================================================== */
 const GAMES = {};
 
@@ -915,14 +920,14 @@ GAMES.morning = el => {
     <div><h1>${T.morning}</h1><p class="q">${T.howAreYou}</p><p class="q">${T.whatDay}</p>
     <div class="datecard card tape"><span class="dd">${day}</span><span class="dm">${rest}</span></div></div></div>`;
   setItem(el, 0);
-  return { keys: [["Space", "the date bounces"]], onKey(k) { if (isGo(k)) { restart($(".datecard", el), "bounce"); SFX.sparkle(); return true; } } };
+  return { keys: () => [["Space", "the date bounces", true]], onKey(k) { if (isGo(k)) { restart($(".datecard", el), "bounce"); SFX.sparkle(); return true; } } };
 };
 
 /* 2. Snake reveal: the snake slides in (hiss) → "What is it?" → It's a snake! → topic, goal, agenda */
 GAMES.reveal = (el, sc) => {
-  let step = 0, answered = false;
+  let step = 0, asked = false, answered = false, qt = null;
   function render() {
-    answered = false;
+    asked = answered = false;
     if (step === 0) {
       el.innerHTML = `<div class="reveal"><div class="lane"><div class="slither">${V("0 0 270 140", snakeH("happy"))}</div></div>
         <div class="asks"><div class="bub q" id="wii" style="visibility:hidden">${T.whatIsIt}</div><div class="bub ghost" id="ans">${T.itsA} <span class="gap">…</span>.</div></div></div>`;
@@ -939,17 +944,17 @@ GAMES.reveal = (el, sc) => {
   }
   function slide() {
     const s = $(".slither", el); restart(s, "slither"); SFX.hiss(2.4);
-    $("#wii", el).style.visibility = "hidden";
-    sc.after(2500, () => { const q = $("#wii", el); if (!q) return; q.style.visibility = "visible"; restart(q, "pop"); speak(T.whatIsIt); el.dataset.state = "asked"; });
+    qt = sc.after(2500, ask);
   }
+  function ask() { sc.clear(qt); const q = $("#wii", el); if (!q || asked) return; asked = true; q.style.visibility = "visible"; restart(q, "pop"); speak(T.whatIsIt); el.dataset.state = "asked"; }
   function answer() { const a = $("#ans", el); a.className = "bub yes pop"; a.innerHTML = `${T.itsA} ${wHTML("snake")}!`; answered = true; el.dataset.state = "answered"; SFX.sparkle(); }
+  function hissAgain() { restart($(".slither", el), "slither"); SFX.hiss(2.4); }
   render();
   return {
-    keys: [["Space", "hiss again"], ["Enter", "It’s a snake!"]],
+    keys: () => [["Space", step === 0 ? (!asked ? "What is it?" : !answered ? "It’s a snake!" : "hiss again") : "hiss", step < 2]],
     onKey(k) {
-      if (k === " " && step === 0) return slide(), true;
+      if (k === " " && step === 0) return (!asked ? ask() : !answered ? answer() : hissAgain()), true;
       if (k === " " && step === 1) { SFX.hiss(1.4); sssFly($(".coil", el), 3); return true; }
-      if (k === "Enter" && step === 0 && !answered) return answer(), true;
       if (k === "ArrowRight" && step < 2) { step++; render(); return true; }
       if (k === "ArrowLeft" && step > 0) { step--; render(); return true; }
     }
@@ -963,7 +968,7 @@ function storyLine(i, highlight) {
   return t;
 }
 GAMES.story = (el, sc) => {
-  let i = 0, who = -1;
+  let i = 0, who = -1, said = false;
   function render() {
     const s = LESSON.story[i], w = s.word && WB[s.word];
     el.innerHTML = `<div class="story"><div class="panel card tape" data-panel="${i}">${PANELS[i]()}</div><div class="tell">
@@ -975,26 +980,33 @@ GAMES.story = (el, sc) => {
       </div></div>${dotsHTML(7, i, i)}`;
     $$("[data-say]", el).forEach(b => b.onclick = () => { speak(b.dataset.say); restart($(".wcard", el), "bounce"); });
     $(".panel", el).onclick = () => { if (s.word === "snake") SFX.hiss(1.6); };
-    setItem(el, i, who >= 0 ? "repeat" + who : "");
+    setItem(el, i, who >= 0 ? "repeat" + who : said ? "said" : "");
     if (s.word === "snake") sc.after(500, () => SFX.hiss(1.8));
     if (s.word === "scissors") sc.after(500, () => SFX.snip());
   }
   const heartIcon = () => V("0 0 40 40", `<path d="M20 34 C2 22 6 6 20 14 C34 6 38 22 20 34 Z" fill="${P.coral}" stroke-width="3"/>`);
-  const move = d => { const n = i + d; if (n < 0 || n > 6) return false; i = n; who = -1; render(); return true; };
+  const move = d => { const n = i + d; if (n < 0 || n > 6) return false; i = n; who = -1; said = false; render(); return true; };
+  // Space: the word → Everybody → Girls → Boys → the word again; every press plays the word
+  function space(w) {
+    if (said && who < 2) who++;
+    said = true;
+    $$(".who b", el).forEach((b, j) => b.className = j === who ? "on" : j < who ? "done" : "");
+    el.dataset.state = who >= 0 ? "repeat" + who : "said";
+    speak(w); restart($(".wcard", el), "bounce");
+  }
   render();
   return {
-    keys: [["Space", "say the word"], ["Enter", "class → girls → boys"]],
+    keys: () => [["Space", !said ? "say the word" : who < 2 ? ["Everybody", "Girls", "Boys"][who + 1] : "the word again", !!LESSON.story[i].word]],
     onKey(k) {
       const w = LESSON.story[i].word;
-      if (k === " " && w) { speak(w); restart($(".wcard", el), "bounce"); return true; }
-      if (k === "Enter" && w) { who = who >= 2 ? -1 : who + 1; $$(".who b", el).forEach((b, j) => b.className = j === who ? "on" : j < who ? "done" : ""); el.dataset.state = who >= 0 ? "repeat" + who : ""; if (who >= 0) speak(w); return true; }
+      if (k === " " && w) return space(w), true;
       if (k === "ArrowRight") return move(1);
       if (k === "ArrowLeft") return move(-1);
     }
   };
 };
 
-/* 4. Stop me when…: the teacher plays the target word (Space / Enter, never by itself); single pictures; the class shouts Stop! at the target. ← (and →) = next picture */
+/* 4. Stop me when…: the teacher plays the target word (Space, never by itself); single pictures; the class shouts Stop! at the target (S). → next picture, ← previous */
 GAMES.stopme = (el, sc) => {
   const targets = S.stopTargets;
   let r = 0, seq = [], pos = -1, stopped = false;
@@ -1022,19 +1034,23 @@ GAMES.stopme = (el, sc) => {
     if (pos >= seq.length - 1) seq.push(...makeRun(targets[r]));
     pos++; render(); SFX.whoosh(); return true;
   }
+  function back() { if (pos < 0) return false; pos--; stopped = false; render(); return true; }
   function stop() {
+    if (pos < 0 || stopped) return false;
     const b = document.createElement("div"); b.className = "burst"; b.innerHTML = BURST; el.appendChild(b);
     SFX.stop(); sc.after(1300, () => b.remove());
-    if (pos >= 0 && seq[pos] === targets[r] && !stopped) { stopped = true; const rr = r; sc.after(700, () => { if (r !== rr || !stopped) return; render(); SFX.sparkle(); }); }
+    if (seq[pos] === targets[r]) { stopped = true; const rr = r, pp = pos; sc.after(700, () => { if (r !== rr || pos !== pp || !stopped) return; render(); SFX.sparkle(); }); }
     el.dataset.burst = String(+(el.dataset.burst || 0) + 1);
+    return true;
   }
   newRound();
   return {
-    keys: [["Space", "hear the word"], ["S", "STOP!"]],
+    keys: () => [["Space", "hear the word", true], ["S", "STOP!", pos >= 0 && !stopped]],
     onKey(k) {
-      if (k === " " || k === "Enter") return speak(targets[r]), true;
-      if (k === "s" || k === "S") return stop(), true;
-      if (k === "ArrowLeft" || k === "ArrowRight") { if (!advance()) nextStage(); return true; }   // ← is "next" here too, so it never steps back a stage
+      if (k === " ") return speak(targets[r]), true;
+      if (k === "s") return stop();
+      if (k === "ArrowRight") return advance();
+      if (k === "ArrowLeft") return back();
     }
   };
 };
@@ -1061,11 +1077,11 @@ GAMES.missing = (el, sc) => {
   }
   render();
   return {
-    keys: [["Space", "next step"]],
+    keys: () => [["Space", { look: "close eyes", closed: "open eyes", open: "show it" }[phase] || (LESSON.itsA[rounds[r]] ? "It’s a …" : "say it again"), true]],
     onKey(k) {
       if (isGo(k)) return space(), true;
       if (k === "ArrowRight") { if (r >= rounds.length - 1) return false; r++; phase = "look"; render(); return true; }
-      if (k === "ArrowLeft") { if (r === 0 && phase === "look") return false; if (phase !== "look") phase = "look"; else r--; render(); return true; }
+      if (k === "ArrowLeft") { if (r <= 0) return false; r--; phase = "look"; render(); return true; }
     }
   };
 };
@@ -1081,7 +1097,7 @@ GAMES.read = el => {
   }
   render();
   return {
-    keys: [["Space", "hear the word"]],
+    keys: () => [["Space", "hear the word", true]],
     onKey(k) {
       if (isGo(k)) { speak(list[i]); restart($(".readc .w", el), "bounce"); return true; }
       if (k === "ArrowRight") { if (i >= 5) return false; i++; render(); return true; }
@@ -1116,7 +1132,7 @@ GAMES.which = (el, sc) => {
   }
   render();
   return {
-    keys: [["Space", "show the answer"]],
+    keys: () => [["Space", revealed ? "say it again" : "show the answer", true]],
     onKey(k) {
       if (isGo(k)) return reveal(), true;
       if (k === "ArrowRight") { if (i >= items.length - 1) return false; i++; render(); return true; }
@@ -1125,7 +1141,7 @@ GAMES.which = (el, sc) => {
   };
 };
 
-/* 8. Is it a…?: half the class asks, half answers from the picture; no voice, only the pupils speak; Enter swaps the halves */
+/* 8. Is it a…?: half the class asks, half answers from the picture; no voice, only the pupils speak; X swaps the halves */
 GAMES.isit = (el, sc) => {
   const items = S.isit; let i = 0, left = "ask", shown = false;
   function halfHTML(role, id) {
@@ -1143,14 +1159,14 @@ GAMES.isit = (el, sc) => {
     el.dataset.left = left; el.dataset.answer = pid === qid ? "yes" : "no";
     setItem(el, i, shown ? "answered" : "asked");
   }
-  function show() { if (shown) return; shown = true; render(false); SFX.pop(); }
+  function show() { if (shown) return false; shown = true; render(false); SFX.pop(); return true; }
   function go1(d) { i += d; shown = false; render(false); }
   render();
   return {
-    keys: [["Space", "show the answer"], ["Enter", "swap the halves"]],
+    keys: () => [["Space", "show the answer", !shown], ["X", "swap the halves", true]],
     onKey(k) {
-      if (k === " ") return show(), true;
-      if (k === "Enter") { left = left === "ask" ? "answer" : "ask"; render(); SFX.whoosh(); return true; }
+      if (k === " ") return show();
+      if (k === "x") { left = left === "ask" ? "answer" : "ask"; render(); SFX.whoosh(); return true; }
       if (k === "ArrowRight") { if (i >= items.length - 1) return false; go1(1); return true; }
       if (k === "ArrowLeft") { if (i <= 0) return false; go1(-1); return true; }
     }
@@ -1172,7 +1188,7 @@ GAMES.hiss = el => {
   function hiss() { SFX.hiss(.7); sssFly($(".sssbtn", el), 2); n++; el.dataset.hisses = n; el.dataset.state = "hissed"; }
   render();
   return {
-    keys: [["Space", "a short hiss"]],
+    keys: () => [["Space", "a short hiss", true]],
     onKey(k) {
       if (isGo(k)) return hiss(), true;
       if (k === "ArrowRight") { if (i >= 6) return false; i++; render(); return true; }
@@ -1198,19 +1214,19 @@ GAMES.peek = (el, sc) => {
     setItem(el, i, "covered"); el.dataset.open = 0;
   }
   function step() {
-    const cov = $$(".cover i", el); if (el._k >= cov.length) { stopRun(); return; }
+    const cov = $$(".cover i", el); if (el._k >= cov.length) { revealAll(); return; }
     cov[el._tiles[el._k++]].classList.add("off"); el.dataset.open = el._k; SFX.pop();
     timer = sc.after(S.peekStepMs, step);
   }
-  function toggle() { if (running) { stopRun(); el.dataset.state = "paused"; return; } running = true; el.dataset.state = "peeking"; $("#pk", el).innerHTML = ICON.pause; step(); }
+  function toggle() { if (el.dataset.state === "revealed") return false; if (running) { stopRun(); el.dataset.state = "paused"; return true; } running = true; el.dataset.state = "peeking"; $("#pk", el).innerHTML = ICON.pause; step(); return true; }
   function stopRun() { running = false; if (timer) sc.clear(timer); timer = null; const b = $("#pk", el); if (b) b.innerHTML = ICON.play; }
-  function revealAll() { if (el.dataset.state === "revealed") return; stopRun(); $$(".cover i", el).forEach(t => t.classList.add("off")); el.dataset.state = "revealed"; el.dataset.open = 25; sc.after(400, () => { speak(order[i]); SFX.cheer(); confettiAt($(".peekbox", el), 60); }); }
+  function revealAll() { if (el.dataset.state === "revealed") return false; stopRun(); $$(".cover i", el).forEach(t => t.classList.add("off")); el.dataset.state = "revealed"; el.dataset.open = 25; sc.after(400, () => { speak(order[i]); SFX.cheer(); confettiAt($(".peekbox", el), 60); }); return true; }
   render();
   return {
-    keys: [["Space", "uncover / pause"], ["Enter", "show it all"]],
+    keys: () => { const done = el.dataset.state === "revealed"; return [["Space", running ? "pause" : "uncover", !done], ["Y", "show it all", !done]]; },
     onKey(k) {
-      if (k === " ") return toggle(), true;
-      if (k === "Enter") return revealAll(), true;
+      if (k === " ") return toggle();
+      if (k === "y") return revealAll();
       if (k === "ArrowRight") { if (i >= order.length - 1) return false; i++; render(); return true; }
       if (k === "ArrowLeft") { if (i <= 0) return false; i--; render(); return true; }
     },
@@ -1288,17 +1304,18 @@ GAMES.mime = (el, sc) => {
     if (half === 0) { SFX.bell(); banner("Swap!", ICON.swap); half = 1; newTimer(); el.dataset.state = "swap"; sc.after(3000, () => { if (half === 1 && !timer.running && !timer.ended) { timer.toggle(); el.dataset.state = "running"; } }); }
     else { SFX.chime(); banner("Time’s up!", ICON.flag); el.dataset.state = "done"; }
   }
-  function toggle() { if (!timer || timer.ended) return; timer.toggle(); el.dataset.state = timer.running ? "running" : "paused"; }
-  function swapNow() { if (half === 0 && timer && !timer.ended) timer.finish(); }
+  function toggle() { if (!timer || timer.ended) return false; timer.toggle(); el.dataset.state = timer.running ? "running" : "paused"; return true; }
+  function swapNow() { if (half !== 0 || !timer || timer.ended) return false; timer.finish(); return true; }
   const onResize = () => { if (step === 1) { if (half === 1) place(0, 1); } };
   addEventListener("resize", onResize);
   render();
   return {
-    keys: [["Space", "start / pause"], ["Enter", "swap now"], ["H", "Hebrew"]],
+    keys: () => step === 0 ? [["Space", heShown ? "Hebrew off" : "Hebrew rules", true]]
+      : [["Space", timer && timer.running ? "pause" : "start", !!timer && !timer.ended], ["X", "swap now", half === 0 && !!timer && !timer.ended]],
     onKey(k) {
-      if (step === 0 && (k === "h" || k === "H")) return toggleHe(), true;
-      if (step === 1 && k === " ") return toggle(), true;
-      if (step === 1 && k === "Enter") return swapNow(), true;
+      if (step === 0 && k === " ") return toggleHe(), true;
+      if (step === 1 && k === " ") return toggle();
+      if (step === 1 && k === "x") return swapNow();
       if (k === "ArrowRight" && step === 0) { step = 1; render(); return true; }
       if (k === "ArrowLeft" && step === 1) { step = 0; render(); return true; }
     },
@@ -1306,7 +1323,7 @@ GAMES.mime = (el, sc) => {
   };
 };
 
-/* 12. Snake chain: the snake grows one picture per row (C: a new row starts again); What did we learn today?; all ticked; bye-bye */
+/* 12. Snake chain: the snake grows one picture per word (C: a new row starts again) → What did we learn today? (ticks) → bye-bye; → / ← between the three */
 let ALL_DONE = false;
 GAMES.chain = (el, sc) => {
   let added = [], step = 0, ticks = 0, answered = false;
@@ -1337,27 +1354,26 @@ GAMES.chain = (el, sc) => {
     if (added.length === WIDS.length) sc.after(700, () => { confettiAt($(".head", el)); SFX.hiss(1.6); SFX.cheer(); });
     return true;
   }
-  function forward() {
-    if (step === 0) { if (!add()) { step = 1; render(); } return true; }
+  function space() {
+    if (step === 0) return add();
     if (step === 1) {
       if (!answered) { answered = true; const a = $(".ans", el); a.style.visibility = "visible"; restart(a, "pop"); SFX.hiss(1.4); el.dataset.state = "answer"; return true; }
       if (ticks < LESSON.agenda.length) { ticks++; const b = $$(".agb", el)[ticks - 1]; b.classList.add("done"); SFX.sparkle(); el.dataset.state = "ticked" + ticks; if (ticks === LESSON.agenda.length) { ALL_DONE = true; topAgenda(); } return true; }
-      step = 2; render(); return true;
     }
     return false;
   }
   // C: a new row starts the snake again (each row says all the words)
-  function reset() { if (step !== 0 || !added.length) return true; added = []; render(); SFX.whoosh(); return true; }
-  function back() {
-    if (step === 2) { step = 1; render(); return true; }
-    if (step === 1) { step = 0; render(); return true; }
-    if (added.length) { added.pop(); render(); return true; }
-    return false;
-  }
+  function reset() { if (step !== 0 || !added.length) return false; added = []; render(); SFX.whoosh(); return true; }
   render();
   return {
-    keys: [["Space", "next word"], ["C", "new row"]],
-    onKey(k) { if (k === "c" || k === "C") return reset(); if (isGo(k) || k === "ArrowRight") return forward(); if (k === "ArrowLeft") return back(); },
+    keys: () => step === 0 ? [["Space", "next word", added.length < WIDS.length], ["C", "new row", added.length > 0]]
+      : step === 1 ? [["Space", !answered ? "show the answer" : "tick the next part", !answered || ticks < LESSON.agenda.length]] : [],
+    onKey(k) {
+      if (k === "c") return reset();
+      if (isGo(k)) return space();
+      if (k === "ArrowRight") { if (step >= 2) return false; step++; render(); return true; }
+      if (k === "ArrowLeft") { if (step <= 0) return false; step--; render(); return true; }
+    },
     stop() { ALL_DONE = false; }
   };
 };
@@ -1381,7 +1397,7 @@ function go(i) {
   screenEl.innerHTML = ""; screenEl.className = "g-" + st.game; for (const k of Object.keys(screenEl.dataset)) delete screenEl.dataset[k];
   screenEl.dataset.game = st.game; screenEl.dataset.stage = i + 1;
   ctrl = GAMES[st.game](screenEl, scope, st) || {};
-  $("#legend").innerHTML = [...(ctrl.keys || []), ["PgDn", "next part"]].map(([key, what]) => `<span><span class="kbd">${key}</span> ${what}</span>`).join("");
+  drawLegend();
   $("#stNum").textContent = i + 1;
   $("#stName").textContent = curly(st.name);
   topAgenda();
@@ -1390,10 +1406,24 @@ function go(i) {
 }
 const nextStage = () => { if (cur < STAGES.length - 1) go(cur + 1); };
 const prevStage = () => { if (cur > 0) go(cur - 1); };
+// the key legend: what each key does right now; keys that can't act are greyed
+function drawLegend() {
+  const ks = [...(ctrl.keys ? ctrl.keys() : []), ["R", "again", !!lastSpoken], ["PgDn", "next part", cur < STAGES.length - 1]];
+  $("#legend").innerHTML = ks.map(([key, what, on]) => `<span class="${on ? "" : "off"}" data-k="${key.toLowerCase()}"><span class="kbd">${key}</span> ${what}</span>`).join("");
+}
+new MutationObserver(drawLegend).observe(screenEl, { attributes: true });
+// a press that did nothing: the legend flashes, with the key that would act (PgDn at a stage's end)
+let nudgeT = null;
+function nudge(key) {
+  const lg = $("#legend"); drawLegend();
+  lg.classList.remove("nudge"); void lg.offsetWidth; lg.classList.add("nudge");
+  if (key) $(`[data-k="${key}"]`, lg)?.classList.add("hot");
+  clearTimeout(nudgeT); nudgeT = setTimeout(() => lg.classList.remove("nudge"), 1400);
+}
 
 $("#logo").innerHTML = LOGO;
 $("#menuBtn").innerHTML = ICON.menu; $("#prevBtn").innerHTML = ICON.prev; $("#nextBtn").innerHTML = ICON.next; $("#fsBtn").innerHTML = ICON.fs; $("#closeMenu").innerHTML = ICON.close;
-// the top-bar arrows move between stages; the keyboard arrows move through items first
+// the top-bar arrows move between stages; the keyboard arrows move through a stage's items and stop at its ends
 $("#prevBtn").onclick = prevStage;
 $("#nextBtn").onclick = nextStage;
 const toggleFS = () => { if (document.fullscreenElement) document.exitFullscreen?.(); else document.documentElement.requestFullscreen?.().catch(() => {}); };
@@ -1407,7 +1437,7 @@ $("#menuGrid").innerHTML = STAGES.map((s, k) => `<button class="mstage"><span cl
 $$(".mstage").forEach((b, k) => b.onclick = () => { closeMenu(); go(k); });
 const totalNet = STAGES.reduce((t, s) => t + s.net, 0);
 $("#totalNet").textContent = totalNet;
-$("#menuKeys").innerHTML = `<span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">1</span><span class="kbd">0</span>–<span class="kbd">1</span><span class="kbd">${STAGES.length % 10}</span> jump to a stage · <span class="kbd">PgUp</span> <span class="kbd">PgDn</span> or the top-bar arrows: the stage · <span class="kbd">←</span> <span class="kbd">→</span> items, then the stage · <span class="kbd">Space</span> show / play · <span class="kbd">R</span> say it again · <span class="kbd">F</span> full screen · <span class="kbd">M</span> this menu`;
+$("#menuKeys").innerHTML = `<span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">1</span><span class="kbd">0</span>–<span class="kbd">1</span><span class="kbd">${STAGES.length % 10}</span> jump to a stage · <span class="kbd">PgDn</span> <span class="kbd">PgUp</span> or the top-bar arrows: next / previous stage · <span class="kbd">→</span> <span class="kbd">←</span> next / previous item, never past the stage · <span class="kbd">Space</span> the next step (the corner legend says which) · <span class="kbd">R</span> say it again · <span class="kbd">F</span> full screen · <span class="kbd">M</span> this menu`;
 $("#clockRule").innerHTML = `${ICON.clock.replace("<svg", '<svg style="width:1.1em;height:1.1em;display:inline;vertical-align:-.2em"')} The pair game (${STAGES.findIndex(s => s.game === "mime") + 1}) starts at least 8 minutes before the bell. Running late? See the plan.`;
 const menuEl = $("#menu");
 const openMenu = () => { menuEl.hidden = false; }, closeMenu = () => { menuEl.hidden = true; };
@@ -1415,7 +1445,7 @@ $("#menuBtn").onclick = () => menuEl.hidden ? openMenu() : closeMenu();
 $("#closeMenu").onclick = closeMenu;
 menuEl.onclick = e => { if (e.target === menuEl) closeMenu(); };
 
-// keyboard: 1–12 (two digits for 10–12), PageUp / PageDown = stage, arrows, Space / Enter
+// keyboard: 1–12 (two digits for 10–12), PageUp / PageDown = stage, arrows = items, Space = next step, stage letters
 let dbuf = "", dtimer = null;
 function digit(d) {
   clearTimeout(dtimer);
@@ -1426,19 +1456,20 @@ function digit(d) {
 }
 addEventListener("keydown", e => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
-  const k = e.key; ac();
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key; ac();
   if ([" ", "Enter", "Backspace", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "PageUp", "PageDown"].includes(k)) e.preventDefault();
   if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
-  if (k === "f" || k === "F") return toggleFS();
-  if (k === "m" || k === "M") return menuEl.hidden ? openMenu() : closeMenu();
+  if (e.repeat) return;   // a held key never runs on
+  if (k === "f") return toggleFS();
+  if (k === "m") return menuEl.hidden ? openMenu() : closeMenu();
   if (k === "Escape") return closeMenu();
   if (/^[0-9]$/.test(k)) return digit(k);
   if (k === "PageDown" || k === "PageUp") { closeMenu(); return k === "PageDown" ? nextStage() : prevStage(); }
   if (!menuEl.hidden) return;
-  if (ctrl.onKey && ctrl.onKey(k, e)) return;
-  if (k === "ArrowRight") return nextStage();
-  if (k === "ArrowLeft") return prevStage();
-  if ((k === "r" || k === "R") && lastSpoken) speak(lastSpoken);
+  if (k === "r") return lastSpoken ? speak(lastSpoken) : nudge("r");
+  if (ctrl.onKey && ctrl.onKey(k, e)) return drawLegend();
+  if (k === "ArrowRight") return nudge("pgdn");
+  if (k === " " || k === "Enter" || k === "ArrowLeft" || (ctrl.keys && ctrl.keys().some(([key]) => key.toLowerCase() === k))) nudge(k === " " ? "space" : k.length === 1 ? k : null);
 });
 addEventListener("pointerdown", () => ac(), { once: true });
 addEventListener("resize", () => { CV.width = innerWidth; CV.height = innerHeight; });

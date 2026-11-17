@@ -166,9 +166,12 @@ async function right(where) {
   ok(a !== b, `ArrowRight did not advance at ${where} (${a})`);
   return b;
 }
+// → at a stage's end never leaves it (the legend flashes PgDn); PgDn opens the next stage
 async function rightToNextStage(st) {
   await key('ArrowRight', 220);
-  ok((await ds()).stage === String(st + 1), `ArrowRight at the end of stage ${st} did not open stage ${st + 1}`);
+  ok((await ds()).stage === String(st) && await count('#legend.nudge [data-k="pgdn"].hot') === 1, `ArrowRight at the end of stage ${st} left the stage or did not flash PgDn`);
+  await key('PageDown', 220);
+  ok((await ds()).stage === String(st + 1), `PgDn at the end of stage ${st} did not open stage ${st + 1}`);
 }
 
 // ---------- the walk through all 12 stages (used at 1366×768 and again at 1920×1080) ----------
@@ -182,7 +185,8 @@ async function walk(full) {
   await load(2); await shot('slide');
   await waitFor(() => document.querySelector('#screen').dataset.state === 'asked', '"What is it?"');
   await shot('asked');
-  await key('Enter'); ok((await ds()).state === 'answered', 'Enter did not answer "It\'s a snake!"'); await shot('answered');
+  await key(' '); ok((await ds()).state === 'answered', 'Space did not answer "It\'s a snake!"'); await shot('answered');
+  await key(' '); ok((await ds()).state === 'answered' && await page.evaluate(() => /snake/.test(document.querySelector('#ans').textContent)), 'Space after the answer lost it');
   await right('reveal 0'); await key(' '); await shot('letter-s');
   await right('reveal 1'); await shot('goal-agenda');
   await rightToNextStage(2);
@@ -193,29 +197,31 @@ async function walk(full) {
     ok((await ds()).item === String(i), `story: expected line ${i + 1}`);
     await shot();
     if (i < 6) {
-      await key(' ', 200);
-      if (i === 0 || full) { await key('Enter'); await key('Enter'); await key('Enter'); ok((await ds()).state === 'repeat2', 'Enter did not step Everybody → Girls → Boys'); if (i === 0) await shot('everybody-girls-boys'); }
+      await key(' ', 200); ok((await ds()).state === 'said', 'story: Space did not say the word');
+      if (i === 0 || full) { await key(' '); await key(' '); await key(' '); ok((await ds()).state === 'repeat2', 'Space did not step Everybody → Girls → Boys'); if (i === 0) await shot('everybody-girls-boys'); }
     }
     if (i < 6) await right('story ' + i);
   }
   await rightToNextStage(3);
 
-  // 4 Stop me when…: an ear, never the target picture; the voice only on Space / Enter; S = STOP
+  // 4 Stop me when…: an ear, never the target picture; the voice only on Space; S = STOP; → next picture, ← previous
   await load(4);
   { const d = await ds(); ok(d.round === '0' && d.state === 'ready', 'stop me: not ready at round 1'); }
   ok(await count('.stopme .hint .pic,.stopme .pcard') === 0, 'stop me: the target picture shows before the run');
   ok(await page.evaluate(() => window.__spoken.length) === 0, 'stop me: the word played by itself'); await shot('ready');
   await key(' '); ok(await page.evaluate(t => window.__spoken.at(-1) === t, (await ds()).target), 'stop me: Space did not play the word');
-  await key('Enter'); ok(await page.evaluate(() => window.__spoken.length) === 2 && !(await ds()).burst, 'stop me: Enter did not play the word (or fired STOP)');
+  await key('Enter'); ok(await page.evaluate(() => window.__spoken.length) === 1 && await count('#legend.nudge') === 1, 'stop me: Enter did something (it is not a key) or did not flash the legend');
+  await key('s'); ok(!(await ds()).burst && await count('#legend.nudge [data-k="s"].hot') === 1, 'stop me: S before any picture fired STOP or did not flash');
   // fast presses run past the end of the shuffled run: it must keep going, never crash
-  for (let n = 0; n < 45; n++) await key('ArrowLeft', 4);
+  for (let n = 0; n < 45; n++) await key('ArrowRight', 4);
   await sleep(200); ok((await ds()).item === '44', `stop me: 45 fast presses ended at item ${(await ds()).item}`);
+  await key('ArrowLeft', 150); ok((await ds()).item === '43', 'stop me: ← did not go back one picture');
   for (let r = 0; r < 5; r++) {
     let guard = 0;
     for (;;) {
       const cur = await page.evaluate(() => document.querySelector('.stopme .pcard.big')?.dataset.word);
       if (cur === (await ds()).target || ++guard > 40) break;
-      await key('ArrowLeft', 90);
+      await key('ArrowRight', 90);
     }
     ok(guard <= 40, 'stop me: the target never came');
     ok(await count('.stopme .hint') === 1 && await count('.stopme .hint .pic') === 0, `stop me: round ${r + 1} has no ear cue (or shows the picture)`);
@@ -225,13 +231,13 @@ async function walk(full) {
     await key('s', 60);
     if (r === 0) await page.screenshot({ path: path.join(SHOTS, '04-stopme-burst.png') });
     if (r === 2) {   // STOP and straight on: the late "stopped" redraw must not land on the next round
-      await key('ArrowLeft', 1000); const d = await ds();
-      ok(d.round === '3' && d.state === 'ready', `stop me: S then ← at once left round ${d.round} in state ${d.state}`);
+      await key('ArrowRight', 1000); const d = await ds();
+      ok(d.round === '3' && d.state === 'ready', `stop me: S then → at once left round ${d.round} in state ${d.state}`);
       continue;
     }
     await waitFor(() => document.querySelector('#screen').dataset.state === 'stopped', 'the STOP to land');
     if (r === 0) await shot('stopped');
-    if (r < 4) { await key('ArrowLeft', 150); ok((await ds()).round === String(r + 1), 'stop me: ← after the target did not start the next round'); }
+    if (r < 4) { await key('ArrowRight', 150); ok((await ds()).round === String(r + 1), 'stop me: → after the target did not start the next round'); }
   }
   await rightToNextStage(4);
 
@@ -283,7 +289,7 @@ async function walk(full) {
     const d = await ds();
     ok(d.state === 'answered' && await page.evaluate(a => document.querySelector(`.bub.lit[data-a]`)?.dataset.a === a, d.answer), 'is it: the right answer is not lit');
     if (i <= 1 || full) await shot('answered');
-    if (i === 0) { const l = d.left; await key('Enter', 300); ok((await ds()).left !== l, 'is it: Enter did not swap the halves'); await shot('swapped'); }
+    if (i === 0) { await key(' ', 160); ok(await count('#legend.nudge') === 1, 'is it: a second Space did not flash the legend'); const l = d.left; await key('x', 300); ok((await ds()).left !== l, 'is it: X did not swap the halves'); await shot('swapped'); }
     if (i < 5) await right('isit ' + i);
   }
   await sleep(600); ok(await page.evaluate(() => window.__spoken.length) === 0, 'is it: a voice played');
@@ -309,7 +315,7 @@ async function walk(full) {
     await key(' '); ok((await ds()).state === 'paused', 'peek: Space did not pause');
     if (i <= 1 || full) await shot('peeking');
     if (i === 0) { await tap('.peek .bub.no'); await tap('.peek .bub.yes', 200); await waitFor(() => document.querySelector('#screen').dataset.state === 'revealed', 'Yes to reveal the picture'); }
-    else await key('Enter', 200);
+    else await key('y', 200);
     ok((await ds()).open === '25', 'peek: not all uncovered');
     if (i <= 1 || full) await shot('revealed');
     if (i < 5) await right('peek ' + i);
@@ -319,8 +325,8 @@ async function walk(full) {
   // 11 Guess my mime
   await load(11, FAST_TIMER);
   await shot('rules');
-  await key('h'); ok((await ds()).state === 'hebrew', 'mime: H did not show the Hebrew rules'); await shot('rules-hebrew');
-  await key('h'); await right('mime rules');
+  await key(' '); ok((await ds()).state === 'hebrew', 'mime: Space did not show the Hebrew rules'); await shot('rules-hebrew');
+  await key(' '); await right('mime rules');
   ok(await count('.tiles6 .pcard') === 6, 'mime: not 6 pictures'); await shot('ready');
   const mk = () => page.evaluate(() => [...document.querySelectorAll('.track')].map(t => t.querySelector('.mk').getBoundingClientRect().left - t.getBoundingClientRect().left));
   const m0 = await mk();
@@ -349,6 +355,7 @@ async function walk(full) {
   // 12 Snake chain
   await load(12);
   await shot('empty');
+  await key('c', 150); ok(await count('#legend.nudge [data-k="c"].hot') === 1 && await count('#legend [data-k="c"].off') === 1, 'chain: C with no snake did not flash a greyed C');
   await tap('.bank .btn[data-word="star"]'); ok(await count('.segs .seg') === 1, 'chain: tapping a word did not grow the snake');
   ok(await page.evaluate(() => [...document.querySelectorAll('.bank .btn')].every(b => b.querySelector(':scope > span'))), 'chain: bank button text not wrapped (flex splits the S)');
   for (let n = 1; n < 3; n++) await key(' ', 140);
@@ -358,13 +365,16 @@ async function walk(full) {
   ok(await count('.segs .seg') === 6, 'chain: the snake did not reach 6 words');
   await sleep(900 * FAST + 200); await shot('full');
   ok((await page.evaluate(() => window.__sfx)).includes('hiss'), 'chain: no hiss at the end');
-  await key(' ', 200); await shot('learn');
+  await key(' ', 200); ok((await ds()).state === 'chain' && await count('#legend.nudge') === 1, 'chain: Space on a full snake left it, or did not flash the legend');
+  await key('ArrowRight', 200); await shot('learn');
   await key(' ', 200); ok((await ds()).state === 'answer', 'chain: Space did not show the answer'); await shot('answer');
   for (let t = 1; t <= 6; t++) await key(' ', 90);
   ok((await ds()).state === 'ticked6', 'chain: the agenda was not ticked 6 times');
   ok(await page.evaluate(() => [...document.querySelectorAll('#agenda > *')].every(a => /done/.test(a.className))), 'chain: the top agenda is not all ticked');
   await shot('ticked');
-  await key(' ', 300); ok((await ds()).state === 'bye', 'chain: no goodbye'); await shot('bye');
+  await key(' ', 300); ok((await ds()).state === 'ticked6', 'chain: Space after the last tick did something');
+  await key('ArrowRight', 300); ok((await ds()).state === 'bye', 'chain: → did not say goodbye'); await shot('bye');
+  await key('ArrowRight', 200); ok((await ds()).stage === '12', 'chain: → at the end left the last stage');
 }
 
 // ---------- 0. fonts, stage list, keys, menu ----------
@@ -406,11 +416,11 @@ await newPage(1920, 1080);
 prefix = 'hd-';
 const SP6 = Array(6).fill(' ');
 const HD = {
-  1: [], 2: ['wait:asked', 'Enter', 'shot:answered', 'ArrowRight', 'ArrowRight', 'shot:goal'], 3: [' ', 'Enter', 'shot:everybody'], 4: ['ArrowLeft', 'shot:run'],
+  1: [], 2: ['wait:asked', ' ', 'shot:answered', 'ArrowRight', 'ArrowRight', 'shot:goal'], 3: [' ', ' ', 'shot:everybody'], 4: ['ArrowRight', 'shot:run'],
   5: [' ', ' ', 'shot:missing', ' ', 'shot:revealed'], 6: [], 7: [' ', 'shot:answer', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'shot:silent'],
-  8: [' ', 'shot:answered'], 9: [' ', 'shot:hissed'], 10: ['Enter', 'shot:revealed'],
-  11: ['h', 'shot:hebrew', 'ArrowRight', 'shot:game'],
-  12: [...SP6, 'shot:full', ' ', ' ', 'shot:answer', ...SP6, ' ', 'shot:bye']
+  8: [' ', 'shot:answered'], 9: [' ', 'shot:hissed'], 10: ['y', 'shot:revealed'],
+  11: [' ', 'shot:hebrew', 'ArrowRight', 'shot:game'],
+  12: [...SP6, 'shot:full', 'ArrowRight', ' ', 'shot:answer', ...SP6, 'ArrowRight', 'shot:bye']
 };
 for (let s = 1; s <= 12; s++) {
   await load(s); await shot();
