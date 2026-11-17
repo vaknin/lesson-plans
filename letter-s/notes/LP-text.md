@@ -14,7 +14,7 @@
 - [r3] Target words: snake, scissors, star, sad, school, stop + the chunk “Is it a…? Yes, it is / No, it isn’t”
 
 - [r4] Textbook and Page:
-- [r4] Additional Materials: projector + the lesson site: lesson site (projector). / Projector only: the teacher runs the site; the pupils have no laptops, so the laptop-lesson parts (full-screen gate, levels/placement quiz, race + ntfy board, per-kid records, Google Classroom pack) do not apply. Nothing printed, nothing physical.
+- [r4] Additional Materials: projector + the lesson site (projector): https://kitah.co.il/letter-s/ (same site, second address: https://vaknin.github.io/lesson-plans/letter-s/) / Projector only: the teacher runs the site; the pupils have no laptops, so the laptop-lesson parts (full-screen gate, levels/placement quiz, race + ntfy board, per-kid records, Google Classroom pack) do not apply. Nothing printed, nothing physical.
 
 - [r5] Highlight the relevant communicative modes:
 
