@@ -81,8 +81,6 @@ a{color:var(--greenD)}
 .diff div b{display:block;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
 .praise{background:var(--goldL);border-radius:16px;padding:8px 14px;font-weight:600}
 .tx{background:#eef2f7;border-radius:16px;padding:8px 14px}
-.tx .st{color:var(--red)}
-.tx .lk{color:var(--greenD)}
 .l1{background:var(--goldL);border-radius:16px;padding:8px 14px}
 .l1 .he{display:block;font-size:20px;margin-top:4px;text-align:right}
 .keys{font-size:16px;color:var(--ink2)}
@@ -91,10 +89,6 @@ a{color:var(--greenD)}
 .late li{counter-increment:l;display:flex;gap:12px;align-items:baseline}
 .late li::before{content:counter(l);flex:none;width:30px;height:30px;border-radius:50%;background:var(--coral);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px}
 .never{margin-top:10px;color:var(--ink2)}
-.signal{display:flex;gap:14px;align-items:center;font-size:24px;font-weight:600}
-.signal span{display:inline-flex;align-items:center;gap:8px;padding:4px 16px;border-radius:999px;box-shadow:inset 0 0 0 3px var(--ink);background:#fff}
-.signal .s{color:var(--red)}
-.signal .l{color:var(--greenD)}
 .nav{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;margin:0 -12px 0;background:rgba(227,242,232,.94);backdrop-filter:blur(4px)}
 .nav a{display:grid;place-items:center;min-width:48px;min-height:48px;border-radius:14px;background:#fff;color:var(--ink);text-decoration:none;font-weight:600;box-shadow:inset 0 0 0 2px var(--line2)}
 .err{background:var(--coralL);border-radius:16px;padding:8px 14px}
@@ -107,7 +101,7 @@ a{color:var(--greenD)}
     <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><g stroke="#1c2541" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="46" fill="#3bb560" stroke-width="5"/><path d="M68 28 C52 18 30 24 34 40 C38 54 66 50 66 66 C66 80 42 82 30 72" fill="none" stroke="#fff" stroke-width="13"/><circle cx="70" cy="28" r="9" fill="#fff"/><circle cx="72" cy="27" r="3" fill="#1c2541" stroke="none"/><path d="M78 33 L86 36 M86 36 l3 -3 M86 36 l2 4" stroke="#e4343d" stroke-width="3"/></g></svg>
     <div>
       <h1>The letter <span class="sl">S</span>: Snake</h1>
-      <div class="meta">Teacher’s plan · Grade 3 · Pre-A1 · Wednesday, 18 November 2026 · 30 net minutes (LP column: 40) · story: “Sam’s Day at School”</div>
+      <div class="meta">Teacher’s plan · Grade 3 · Pre-A1 · Wednesday, 18 November 2026 · 26 net minutes (LP column: 35) · story: “Sam’s Day at School”</div>
     </div>
     <a class="btn" href="index.html">Open the lesson site</a>
   </div>
@@ -131,14 +125,13 @@ a{color:var(--greenD)}
         <li>Sound on: press <span class="kbd">M</span> → “Test sound” before the bell. The date screen (stage 1) is up before the bell.</li>
       </ul>
       <span class="lbl">Keys</span>
-      <div class="keys"><span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">1</span><span class="kbd">0</span>–<span class="kbd">1</span><span class="kbd">4</span> stage · <span class="kbd">←</span> <span class="kbd">→</span> items, then the stage · <span class="kbd">Space</span> <span class="kbd">Enter</span> show / play · <span class="kbd">R</span> say it again · <span class="kbd">F</span> full screen · <span class="kbd">M</span> menu</div>
+      <div class="keys"><span class="kbd">PgDn</span> <span class="kbd">PgUp</span> (or the top-bar <b>&lt;</b> <b>&gt;</b>) next / previous stage · click an agenda icon: jump to that part · <span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">1</span><span class="kbd">0</span>–<span class="kbd">1</span><span class="kbd">2</span> stage · <span class="kbd">←</span> <span class="kbd">→</span> items, then the stage · <span class="kbd">Space</span> <span class="kbd">Enter</span> show / play · <span class="kbd">R</span> say it again · <span class="kbd">F</span> full screen · <span class="kbd">M</span> menu · each stage shows its keys in a tiny legend in the corner</div>
     </div>
     <div class="card">
       <h2>Every stage change</h2>
-      <div class="signal"><span class="s"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M7 12V6.5a1.5 1.5 0 0 1 3 0V11V4.5a1.5 1.5 0 0 1 3 0V11V5.5a1.5 1.5 0 0 1 3 0V12v-3.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4.6 14a1.5 1.5 0 0 1 2.4-1.8z" fill="#fff" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>“Stop!”</span> palm out, arm straight <span class="l">“Look!”</span></div>
-      <p style="margin:10px 0 0">The lesson’s own word and gesture. The site stamps “Stop!” then “Look!” on the screen when the stage changes. One specific praise line per stage (in each stage card).</p>
+      <p style="margin:0">One specific praise line per stage (in each stage card).</p>
       <span class="lbl">Clock rule</span>
-      <p style="margin:0" id="clockRule"><b>The pair game (stage 13) starts at least 8 minutes before the bell.</b></p>
+      <p style="margin:0" id="clockRule"><b>The pair game (stage 11) starts at least 8 minutes before the bell.</b></p>
     </div>
   </div>
 
@@ -146,8 +139,6 @@ a{color:var(--greenD)}
     <div class="card">
       <h2>If running late, cut in this order</h2>
       <ol class="late" id="late">
-        <li><span><b>Read and match</b> → part (a) only.</span></li>
-        <li><span><b>Build the word</b> → 2 words.</span></li>
         <li><span><b>Which word?</b> → 4 items, keeping the 2 silent ones.</span></li>
         <li><span><b>Stop me when…</b> → 3 targets.</span></li>
         <li><span><b>Snake chain</b> → one chain by the whole class, one error fixed.</span></li>
@@ -166,21 +157,20 @@ a{color:var(--greenD)}
           <tr><td class="n">5</td><td>What’s missing?</td><td>B1 Reproduction</td><td class="num">2</td><td class="num">3</td></tr>
           <tr><td class="n">6</td><td>Read with me</td><td>B2 Repetition</td><td class="num">1.5</td><td class="num">2</td></tr>
           <tr><td class="n">7</td><td>Which word?</td><td>B2 Recognition</td><td class="num">2</td><td class="num">3</td></tr>
-          <tr><td class="n">8</td><td>Build the word</td><td>B2 Reproduction</td><td class="num">2</td><td class="num">2</td></tr>
-          <tr><td class="n">9</td><td>Is it a…?</td><td>B3 Repetition</td><td class="num">2</td><td class="num">3</td></tr>
-          <tr><td class="n">10</td><td>Hiss when you hear S!</td><td>B3 Recognition</td><td class="num">2</td><td class="num">2</td></tr>
-          <tr><td class="n">11</td><td>Peek!</td><td>B3 Reproduction</td><td class="num">2</td><td class="num">3</td></tr>
-          <tr><td class="n">12</td><td>Read and match</td><td>B4 Repetition → Recognition/Reproduction + Production</td><td class="num">2</td><td class="num">3</td></tr>
-          <tr><td class="n">13</td><td>Guess my mime (pairs)</td><td>Communicative</td><td class="num">5</td><td class="num">5</td></tr>
-          <tr><td class="n">14</td><td>Snake chain</td><td>Closure</td><td class="num">2</td><td class="num">3</td></tr>
+          <tr><td class="n">8</td><td>Is it a…?</td><td>B3 Repetition</td><td class="num">2</td><td class="num">3</td></tr>
+          <tr><td class="n">9</td><td>Hiss when you hear S!</td><td>B3 Recognition</td><td class="num">2</td><td class="num">2</td></tr>
+          <tr><td class="n">10</td><td>Peek!</td><td>B3 Reproduction</td><td class="num">2</td><td class="num">3</td></tr>
+          <tr><td class="n">11</td><td>Guess my mime (pairs)</td><td>Communicative</td><td class="num">5</td><td class="num">5</td></tr>
+          <tr><td class="n">12</td><td>Snake chain</td><td>Closure</td><td class="num">2</td><td class="num">3</td></tr>
         </tbody>
-        <tfoot><tr><td></td><td>Total</td><td></td><td class="num">30</td><td class="num">40</td></tr></tfoot>
+        <tfoot><tr><td></td><td>Total</td><td></td><td class="num">26</td><td class="num">35</td></tr></tfoot>
       </table>
+      <p class="never">Body 2 Reproduction and Body 4 (written sentence) have no stage today.</p>
     </div>
   </div>
 
   <nav class="nav" aria-label="Stages">
-    <a href="#s1">1</a><a href="#s2">2</a><a href="#s3">3</a><a href="#s4">4</a><a href="#s5">5</a><a href="#s6">6</a><a href="#s7">7</a><a href="#s8">8</a><a href="#s9">9</a><a href="#s10">10</a><a href="#s11">11</a><a href="#s12">12</a><a href="#s13">13</a><a href="#s14">14</a>
+    <a href="#s1">1</a><a href="#s2">2</a><a href="#s3">3</a><a href="#s4">4</a><a href="#s5">5</a><a href="#s6">6</a><a href="#s7">7</a><a href="#s8">8</a><a href="#s9">9</a><a href="#s10">10</a><a href="#s11">11</a><a href="#s12">12</a>
   </nav>
 
   <div class="stages" id="stages">
@@ -197,7 +187,7 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>“Wednesday!”</div><div><b>Harder</b>“Today is Wednesday, the 18th of November.”</div></div>
       <span class="lbl">Praise</span><p class="praise">“Great answers, everyone! You all said the day!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → <span class="kbd">→</span> the snake slides in.</p>
+      <span class="lbl">Transition</span><p class="tx"><span class="kbd">→</span> the snake slides in.</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> makes the date bounce.</p>
     </div></div>
   </section>
@@ -214,7 +204,7 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>“Snake!”</div><div><b>Harder</b>“It’s a snake!”</div></div>
       <span class="lbl">Praise</span><p class="praise">“Wow, you know ‘What is it?’ from the B lesson!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “This is Sam…”</p>
+      <span class="lbl">Transition</span><p class="tx">“This is Sam…”</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Enter</span> fills in “It’s a snake!” · <span class="kbd">Space</span> the snake again · <span class="kbd">→</span> the letter S (voice: “Today, the letter S, like snake!”, <span class="kbd">Space</span> hisses), then the topic, goal and agenda.</p>
     </div></div>
   </section>
@@ -227,7 +217,7 @@ a{color:var(--greenD)}
       <ol>
         <li>This is Sam. Sam goes to <b>school</b>. — hands make a roof over the head</li>
         <li>Sam has <b>scissors</b>. Snip, snip! — two fingers cut</li>
-        <li>Sam cuts a <b>star</b>. — hands open and close (twinkle)</li>
+        <li>Sam cuts a <b>star</b>. — arms and legs out wide, like a star</li>
         <li>Look! A <b>snake</b>! Sssss! — hand wiggles forward like a snake (the hiss plays)</li>
         <li>“<b>Stop</b>, snake! Stop!” — palm out, arm straight</li>
         <li>The snake is <b>sad</b>. It has no friends. — finger draws a tear down the cheek</li>
@@ -240,7 +230,7 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>Do the gesture and say the word with the class.</div><div><b>Harder</b>Say the story line’s end: “Sam cuts a star!”</div></div>
       <span class="lbl">Praise</span><p class="praise">“Super repeating! Girls, beautiful ‘scissors’!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Stop me when you see the school!”</p>
+      <span class="lbl">Transition</span><p class="tx">“Stop me when you see the school!”</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> or tap: the word · <span class="kbd">Enter</span> Everybody → Girls → Boys (the chip lights and the word plays) · <span class="kbd">←</span> <span class="kbd">→</span> story lines.</p>
     </div></div>
   </section>
@@ -249,16 +239,16 @@ a{color:var(--greenD)}
     <header><div class="num">4</div><div><h3>Stop me when…</h3><div class="chips"><span class="chip slot">B1 spoken word</span><span class="chip rec">Recognition</span><span class="chip who">whole class</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
-      <p><span class="say">“Stop me when you see the school!”</span> Presses <span class="kbd">←</span> to move through the pictures one by one (a shuffled run). When the target appears, all shout “Stop!”; the teacher presses <span class="kbd">S</span> or <span class="kbd">Enter</span>: a big STOP burst. Then the next target. Targets: school, scissors, sad, star, snake (snake last or skipped: it is heard 5 times in the story). Round 1 is the demo: the target sits small in the top corner. Later rounds: no hint.</p>
+      <p><span class="say">“Stop me when you see the school!”</span> No target picture is on the screen in any round, only an ear icon. The teacher presses <span class="kbd">Space</span> (or <span class="kbd">Enter</span>): the voice says the target word. Press again as often as needed; the voice never plays by itself. Presses <span class="kbd">→</span> to move through the pictures one by one (a shuffled run). When the target appears, all shout “Stop!”; the teacher presses <span class="kbd">S</span>: a big STOP burst. Then the next target. Targets: school, scissors, sad, star, snake (snake last or skipped: it is heard 5 times in the story). Round 1 is the demo.</p>
       <span class="lbl">Kids do</span>
       <p>Recognise the target by its spoken name; shout “Stop!” with the palm.</p>
       <span class="lbl">Rest of the class</span><p>Everyone shouts together.</p>
     </div><div class="col">
       <span class="lbl">Easier / harder</span>
-      <div class="diff"><div><b>Easier</b>Round 1: the target picture is in the corner.</div><div><b>Harder</b>Later rounds: no hint, only the spoken word.</div></div>
+      <div class="diff"><div><b>Easier</b>Hear the target word again (<span class="kbd">Space</span>) during the run.</div><div><b>Harder</b>Hear the target word once only.</div></div>
       <span class="lbl">Praise</span><p class="praise">“Great ears! You all stopped on time!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Close your eyes!”</p>
-      <span class="lbl">On the site</span><p class="keys"><span class="kbd">←</span> or <span class="kbd">→</span> next picture · <span class="kbd">S</span> / <span class="kbd">Enter</span> STOP · speaker button (top left) says the target again · after the target, <span class="kbd">←</span> next round.</p>
+      <span class="lbl">Transition</span><p class="tx">“Close your eyes!”</p>
+      <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> / <span class="kbd">Enter</span> the target word (as often as needed) · <span class="kbd">←</span> or <span class="kbd">→</span> next picture · <span class="kbd">S</span> STOP · after the target, an arrow: next round.</p>
     </div></div>
   </section>
 
@@ -274,7 +264,7 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>“Star!”</div><div><b>Harder</b>“It’s a star!” (model clips for snake, star, school)</div></div>
       <span class="lbl">Praise</span><p class="praise">“Wow, you remembered! Great ‘It’s a star!’”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Read with me!”</p>
+      <span class="lbl">Transition</span><p class="tx">“Read with me!”</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> close eyes → open (“What’s missing?”) → show it → “It’s a …” · <span class="kbd">←</span> <span class="kbd">→</span> rounds.</p>
     </div></div>
   </section>
@@ -291,7 +281,7 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>Read after the voice.</div><div><b>Harder</b>Read before the voice (tap only after the class has read).</div></div>
       <span class="lbl">Praise</span><p class="praise">“Great reading! I can hear every S!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Which word? Point!”</p>
+      <span class="lbl">Transition</span><p class="tx">“Which word? Show me 1, 2 or 3!”</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> or tap the card: the word · <span class="kbd">←</span> <span class="kbd">→</span> cards (no autoplay).</p>
     </div></div>
   </section>
@@ -300,41 +290,24 @@ a{color:var(--greenD)}
     <header><div class="num">7</div><div><h3>Which word?</h3><div class="chips"><span class="chip slot">B2 written word</span><span class="chip rec">Recognition</span><span class="chip who">whole class</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
-      <p>Items 1–4: the voice says a word; 3 written words show (no pictures). <span class="say">“Which word? Point!”</span> The class points with a hand to the left, middle or right one. Items 5–6 are silent: the teacher points to one written word (a pointing hand shows on screen), no voice; the class does its gesture and says it; then <span class="kbd">Space</span>: the picture and gesture appear and the voice confirms. (This is the LP’s B2 Production row.)</p>
+      <p>Items 1–4: the voice says a word; 3 written words show, numbered 1, 2, 3 (no pictures). <span class="say">“Which word? Show me 1, 2 or 3!”</span> The class holds up 1, 2 or 3 fingers. Items 5–6 are silent: the teacher points to one written word (a pointing hand shows on screen), no voice; the class does its gesture and says it; then <span class="kbd">Space</span>: the picture and gesture appear and the voice confirms. (This is the LP’s B2 Production row.)</p>
       <span class="lbl">Kids do</span>
-      <p>Recognise the written word they hear; read a word alone and show its meaning with the gesture.</p>
-      <span class="lbl">Rest of the class</span><p>All point / all gesture.</p>
+      <p>Recognise the written word they hear and show its number with fingers; read a word alone and show its meaning with the gesture.</p>
+      <span class="lbl">Rest of the class</span><p>All show fingers / all gesture.</p>
     </div><div class="col">
       <span class="lbl">Easier / harder</span>
-      <div class="diff"><div><b>Easier</b>Items 1–4: hear it, then point.</div><div><b>Harder</b>Items 5–6: read it alone, gesture and say it.</div></div>
-      <span class="lbl">Praise</span><p class="praise">“Great pointing! You read it without the voice!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Build the word! Who can help?”</p>
+      <div class="diff"><div><b>Easier</b>Items 1–4: hear it, then show 1, 2 or 3 fingers.</div><div><b>Harder</b>Items 5–6: read it alone, gesture and say it.</div></div>
+      <span class="lbl">Praise</span><p class="praise">“Great fingers! You read it without the voice!”</p>
+      <span class="lbl">Transition</span><p class="tx">“Listen: Is it a star?”</p>
       <span class="lbl">On the site</span><p class="keys">Voice plays on arrival (items 1–4) · tap a word: select / move the pointing hand · <span class="kbd">Space</span> answer + voice · <span class="kbd">←</span> <span class="kbd">→</span> items.</p>
     </div></div>
   </section>
 
-  <section class="stage card" id="s8" data-stage="8" data-net="2" data-lp="2">
-    <header><div class="num">8</div><div><h3>Build the word</h3><div class="chips"><span class="chip slot">B2 written word</span><span class="chip repro">Reproduction</span><span class="chip who">one pupil + whole class</span></div></div><div class="min"><b>2′</b><span>LP 2′</span></div></header>
+  <section class="stage card" id="s8" data-stage="8" data-net="2" data-lp="3">
+    <header><div class="num">8</div><div><h3>Is it a…?</h3><div class="chips"><span class="chip slot">B3 spoken sentence</span><span class="chip rep">Repetition</span><span class="chip who">whole class, halves</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
-      <p>Only star, sad and stop (spelled as they sound). The voice says the word; a pupil taps the letters in order on the board (one extra letter is a distractor; a wrong letter shakes). <span class="say">“Say it with me!”</span> The class says each letter (names for letters already taught, otherwise sounds) and reads the word.</p>
-      <span class="lbl">Kids do</span>
-      <p>Build the heard word from its letters (one pupil); say it letter by letter and read it (the class).</p>
-      <span class="lbl">Rest of the class</span><p>The class says each letter aloud as it lands.</p>
-    </div><div class="col">
-      <span class="lbl">Easier / harder</span>
-      <div class="diff"><div><b>Easier</b>Say the letters with the class.</div><div><b>Harder</b>Come up and build the word alone.</div></div>
-      <span class="lbl">Praise</span><p class="praise">“Wonderful spelling! Every letter loud and clear!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Listen: Is it a star?”</p>
-      <span class="lbl">On the site</span><p class="keys">Tap the tiles · <span class="kbd">Space</span> places the next letter · <span class="kbd">Enter</span> the word again · <span class="kbd">←</span> <span class="kbd">→</span> words.</p>
-    </div></div>
-  </section>
-
-  <section class="stage card" id="s9" data-stage="9" data-net="2" data-lp="3">
-    <header><div class="num">9</div><div><h3>Is it a…?</h3><div class="chips"><span class="chip slot">B3 spoken sentence</span><span class="chip rep">Repetition</span><span class="chip who">whole class, halves</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
-    <div class="body"><div class="col">
-      <span class="lbl">Teacher does and says</span>
-      <p>Models with a picture: <span class="say">“Is it a star?” “Yes, it is!” / “No, it isn’t!”</span> Then <span class="say">“This half: ask! This half: answer!”</span> — the half on the screen’s left asks, the right half answers; <span class="kbd">Enter</span> swaps. The answering half must choose Yes or No from the picture.</p>
+      <p>Models live with a picture (the site plays no voice here; only the pupils speak): <span class="say">“Is it a star?” “Yes, it is!” / “No, it isn’t!”</span> Then <span class="say">“This half: ask! This half: answer!”</span> — the half on the screen’s left asks, the right half answers; <span class="kbd">Enter</span> swaps. The answering half must choose Yes or No from the picture.</p>
       <span class="lbl">Kids do</span>
       <p>Repeat the question and the answers; choose “Yes, it is!” or “No, it isn’t!” from the picture.</p>
       <span class="lbl">Rest of the class</span><p>Both halves are always speaking.</p>
@@ -342,13 +315,13 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>“Star?” · “Yes!” / “No!” (small line under each bubble)</div><div><b>Harder</b>“Is it a star?” · “Yes, it is!” / “No, it isn’t!”</div></div>
       <span class="lbl">Praise</span><p class="praise">“Great asking, this half! Great answering, that half!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Listen to Sam’s story again. Hiss when you hear S!”</p>
-      <span class="lbl">On the site</span><p class="keys">The question plays on arrival · <span class="kbd">Space</span> lights the right answer + voice · <span class="kbd">Enter</span> swap halves · tap a bubble: hear it · <span class="kbd">←</span> <span class="kbd">→</span> pictures.</p>
+      <span class="lbl">Transition</span><p class="tx">“Listen to Sam’s story again. Hiss when you hear S!”</p>
+      <span class="lbl">On the site</span><p class="keys">No voice in this stage · <span class="kbd">Space</span> lights the right answer · <span class="kbd">Enter</span> swap halves · <span class="kbd">←</span> <span class="kbd">→</span> pictures.</p>
     </div></div>
   </section>
 
-  <section class="stage card" id="s10" data-stage="10" data-net="2" data-lp="2">
-    <header><div class="num">10</div><div><h3>Hiss when you hear S!</h3><div class="chips"><span class="chip slot">B3 spoken sentence</span><span class="chip rec">Recognition</span><span class="chip who">whole class + movement</span></div></div><div class="min"><b>2′</b><span>LP 2′</span></div></header>
+  <section class="stage card" id="s9" data-stage="9" data-net="2" data-lp="2">
+    <header><div class="num">9</div><div><h3>Hiss when you hear S!</h3><div class="chips"><span class="chip slot">B3 spoken sentence</span><span class="chip rec">Recognition</span><span class="chip who">whole class + movement</span></div></div><div class="min"><b>2′</b><span>LP 2′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
       <p>Retells Sam’s story (panels on screen, S words <b>not</b> highlighted), pausing after each S word. Demonstrates once: <span class="say">“Sam goes to… school!”</span> + one short “sss” + the school gesture. The gesture is the answer: one short “sss” and the word’s gesture for each of the 6 words (“Sam” and “Snip” may get a hiss, no gesture). The “Stop” palm ends the hiss before the next line. Watches the gestures to see who knows which word.</p>
@@ -359,13 +332,13 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>Hiss on every S word.</div><div><b>Harder</b>Hiss and do the right gesture.</div></div>
       <span class="lbl">Praise</span><p class="praise">“Great gestures, Row 2! You heard every S!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Peek! Ask me: Is it a…?”</p>
+      <span class="lbl">Transition</span><p class="tx">“Peek! Ask me: Is it a…?”</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span>, the green “sss!” button or the panel: one short hiss · <span class="kbd">←</span> <span class="kbd">→</span> story lines.</p>
     </div></div>
   </section>
 
-  <section class="stage card" id="s11" data-stage="11" data-net="2" data-lp="3">
-    <header><div class="num">11</div><div><h3>Peek!</h3><div class="chips"><span class="chip slot">B3 spoken sentence</span><span class="chip repro">Reproduction</span><span class="chip who">whole class</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
+  <section class="stage card" id="s10" data-stage="10" data-net="2" data-lp="3">
+    <header><div class="num">10</div><div><h3>Peek!</h3><div class="chips"><span class="chip slot">B3 spoken sentence</span><span class="chip repro">Reproduction</span><span class="chip who">whole class</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
       <p>A hidden picture is uncovered slowly. <span class="say">“Ask me! Is it a…?”</span> The class asks; the teacher answers <span class="say">“Yes, it is!” / “No, it isn’t!”</span> (or taps the Yes / No bubble for the voice), taking guesses from different rows.</p>
@@ -376,39 +349,19 @@ a{color:var(--greenD)}
       <span class="lbl">Easier / harder</span>
       <div class="diff"><div><b>Easier</b>“Star?”</div><div><b>Harder</b>“Is it a star?”</div></div>
       <span class="lbl">Praise</span><p class="praise">“Super questions! ‘Is it a…?’ sounds perfect!”</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Read with me: Sam goes to school.”</p>
+      <span class="lbl">Transition</span><p class="tx">“Pairs! Watch me!” (demo with one pupil)</p>
       <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> start / pause uncovering · <span class="kbd">Enter</span> show it all · Yes bubble: voice + reveal · No bubble: voice · <span class="kbd">←</span> <span class="kbd">→</span> pictures.</p>
     </div></div>
   </section>
 
-  <section class="stage card" id="s12" data-stage="12" data-net="2" data-lp="3">
-    <header><div class="num">12</div><div><h3>Read and match</h3><div class="chips"><span class="chip slot">B4 written sentence</span><span class="chip rep">Repetition</span>→<span class="chip rec">Recognition</span>/<span class="chip repro">Reproduction</span><span class="chip">+ Production</span><span class="chip who">whole class</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
+  <section class="stage card" id="s11" data-stage="11" data-net="5" data-lp="5">
+    <header><div class="num">11</div><div><h3>Guess my mime (pairs)</h3><div class="chips"><span class="chip slot">Communicative</span><span class="chip who">pair work</span><span class="chip">closed information gap</span></div></div><div class="min"><b>5′</b><span>LP 5′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
-      <p>Echo-reading first (no voice clips): <span class="say">“Sam goes to school.” / “Sam cuts a star.” / “Look! A snake!”</span> — reads each while pointing (<span class="kbd">Space</span> sweeps a line under it); the class echo-reads. Then the written chunk <span class="say">“Is it a star?” / “Yes, it is!” / “No, it isn’t!”</span> (voice clips; the prompts of the pair game).</p>
-      <p>(a) One of the three lines, <b>not read aloud</b>, with 3 pictures (school / star / snake, one thing each): <span class="say">“Read it. Point to the picture!”</span></p>
-      <p>(b) Production: <span class="say">“Sam goes to ______.”</span> with 2 written choices (school / star): <span class="say">“Which word? Read the whole sentence!”</span> The class reads both, chooses, reads the full sentence aloud.</p>
-      <span class="lbl">Kids do</span>
-      <p>Echo-read; read a sentence alone and point to its picture; complete the sentence and read it.</p>
-      <span class="lbl">Rest of the class</span><p>All read; all point.</p>
-    </div><div class="col">
-      <span class="lbl">Easier / harder</span>
-      <div class="diff"><div><b>Easier</b>(a) Read and point to the picture.</div><div><b>Harder</b>(b) Read the whole sentence aloud.</div></div>
-      <span class="lbl">Praise</span><p class="praise">“Great reading! You read the whole sentence!”</p>
-      <span class="lbl">Running late</span><p>Do part (a) only (cut 1).</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Pairs! Watch me!” (demo with one pupil)</p>
-      <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span>: underline (lines 1–3) · next chunk line (4) · show the right picture (a) · fill the gap (b) · tap a picture / word to choose · <span class="kbd">←</span> <span class="kbd">→</span> steps.</p>
-    </div></div>
-  </section>
-
-  <section class="stage card" id="s13" data-stage="13" data-net="5" data-lp="5">
-    <header><div class="num">13</div><div><h3>Guess my mime (pairs)</h3><div class="chips"><span class="chip slot">Communicative</span><span class="chip who">pair work</span><span class="chip">closed information gap</span></div></div><div class="min"><b>5′</b><span>LP 5′</span></div></header>
-    <div class="body"><div class="col">
-      <span class="lbl">Teacher does and says</span>
-      <p><b>Set-up, about 1:15:</b> demo with one pupil (the rules screen shows the 3 steps). Then one pupil says the rules in Hebrew (L1 check); press <span class="kbd">Enter</span> to show the Hebrew rules after that pupil has spoken. Pairs ready: who is A, who is B.</p>
+      <p><b>Set-up, about 1:15:</b> demo with one pupil (the rules screen shows the 3 steps). Then one pupil says the rules in Hebrew (L1 check); press <span class="kbd">H</span> to show the Hebrew rules after that pupil has spoken. Pairs ready: who is A, who is B.</p>
       <p class="l1">Listen for (the Hebrew rules on the screen): <span class="he" dir="rtl" lang="he"><bdi>A</bdi> בוחר/ת מילה בסוד. <bdi>B</bdi> שואל/ת: <bdi>Is it a …?</bdi> עד שהתשובה <bdi>Yes, it is!</bdi> – ואז שניכם עושים את התנועה. בצלצול מתחלפים.</span></p>
       <p><b>Guess first, mime on “Yes”:</b> A secretly picks a word and does not mime it. B guesses: <span class="say">“Is it a star?”</span> (B may do the gesture of the guess). A: <span class="say">“No, it isn’t!”</span> until B is right, then <span class="say">“Yes, it is!”</span> and both do the mime. Any English guess counts: “Star?” / “Is it a star?” / “It’s a star!”.</p>
-      <p>Two halves of 1:45 on a timer that moves left→right. The bell rings and “Swap!” shows: A and B swap; half 2 starts by itself. <span class="kbd">Enter</span> swaps early. The teacher walks around and notes errors for later (no correcting mid-task).</p>
+      <p>Two halves of 1:45 on a snake timer: the snake’s body grows along the track. The bell rings and “Swap!” shows: A and B swap; half 2 starts by itself. <span class="kbd">Enter</span> swaps early. The teacher walks around and notes errors for later (no correcting mid-task).</p>
       <span class="lbl">Kids do</span>
       <p>Ask, answer and guess in pairs.</p>
       <span class="lbl">Rest of the class</span><p>Every pair plays at once.</p>
@@ -417,27 +370,27 @@ a{color:var(--greenD)}
       <div class="diff"><div><b>Easier</b>“Star?” / “Yes!” / “No!” (small prompts, left)</div><div><b>Harder</b>“Is it a star?” / “Yes, it is!” / “No, it isn’t!” (big prompts, right)</div></div>
       <span class="lbl">Praise</span><p class="praise">“Great pairs! I heard ‘Is it a…?’ everywhere!”</p>
       <span class="lbl">Clock rule</span><p>Start this stage at least 8 minutes before the bell.</p>
-      <span class="lbl">Transition</span><p class="tx"><b class="st">“Stop!”</b> palm → <b class="lk">“Look!”</b> → “Let’s make a long snake!”</p>
-      <span class="lbl">On the site</span><p class="keys">Rules: <span class="kbd">Enter</span> Hebrew rules · <span class="kbd">→</span> game screen · <span class="kbd">Space</span> start / pause the timer · <span class="kbd">Enter</span> swap now · tap a prompt: hear it · tap a picture: hear it, and the prompts change to that word (“Is it a school?”), handy for the demo.</p>
+      <span class="lbl">Transition</span><p class="tx">“Let’s make a long snake!”</p>
+      <span class="lbl">On the site</span><p class="keys">Rules: <span class="kbd">H</span> Hebrew rules on / off · <span class="kbd">→</span> game screen · <span class="kbd">Space</span> start / pause the timer · <span class="kbd">Enter</span> swap now · tap a prompt: hear it · tap a picture: hear it, and the prompts change to that word (“Is it a school?”), handy for the demo.</p>
     </div></div>
   </section>
 
-  <section class="stage card" id="s14" data-stage="14" data-net="2" data-lp="3">
-    <header><div class="num">14</div><div><h3>Snake chain</h3><div class="chips"><span class="chip slot">Closure</span><span class="chip who">whole class (rows)</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
+  <section class="stage card" id="s12" data-stage="12" data-net="2" data-lp="3">
+    <header><div class="num">12</div><div><h3>Snake chain</h3><div class="chips"><span class="chip slot">Closure</span><span class="chip who">whole class (rows)</span></div></div><div class="min"><b>2′</b><span>LP 3′</span></div></header>
     <div class="body"><div class="col">
       <span class="lbl">Teacher does and says</span>
-      <p>A true chain: each row repeats all the S words so far and adds one; the snake on the screen grows by one picture per row. All hiss the ending: “sssss!”. <span class="say">“What did we learn today?”</span> → <span class="say">“The letter S, like Snake!”</span> Points back to the agenda: all ticked. Praise, then 1–2 common errors from the pair game fixed together:</p>
+      <p>Each row says all 6 S words in order; the snake on the screen grows by one picture per word. <span class="kbd">C</span> = new row: the snake empties and the next row starts again from the first word. All hiss the ending: “sssss!”. <span class="say">“What did we learn today?”</span> → <span class="say">“The letter S, like Snake!”</span> Points back to the agenda: all ticked. Praise, then 1–2 common errors from the pair game fixed together:</p>
       <p class="err">“Is it <s>a</s> scissors?” → <b>“Is it scissors?”</b></p>
       <p>Goodbye: the voice says “Great job! Bye-bye, S words!”.</p>
       <span class="lbl">Kids do</span>
-      <p>Recall all 6 words, cumulatively; say what they learned.</p>
+      <p>Recall all 6 words in order; say what they learned.</p>
       <span class="lbl">Rest of the class</span><p>Each row in turn; all hiss the ending.</p>
     </div><div class="col">
       <span class="lbl">Easier / harder</span>
-      <div class="diff"><div><b>Easier</b>Say your row’s new word.</div><div><b>Harder</b>Say the whole chain.</div></div>
+      <div class="diff"><div><b>Easier</b>Say the words with your row, looking at the snake.</div><div><b>Harder</b>Say the whole chain alone.</div></div>
       <span class="lbl">Praise</span><p class="praise">“What a long snake! You remember all 6 S words!”</p>
-      <span class="lbl">Running late</span><p>One chain by the whole class, one error fixed (cut 5).</p>
-      <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> or tap a word: the snake grows · then <span class="kbd">Space</span>: the answer (hiss), the 7 ticks one by one, goodbye.</p>
+      <span class="lbl">Running late</span><p>One chain by the whole class, one error fixed (cut 3).</p>
+      <span class="lbl">On the site</span><p class="keys"><span class="kbd">Space</span> or tap a word: the snake grows · <span class="kbd">C</span> new row (the snake empties) · then <span class="kbd">Space</span>: the answer (hiss), the 6 ticks one by one, goodbye.</p>
     </div></div>
   </section>
 

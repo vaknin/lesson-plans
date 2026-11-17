@@ -53,7 +53,7 @@ svg{display:block}
 #stNum{flex:none;display:grid;place-items:center;min-width:1.9em;height:1.9em;padding:0 .3em;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:.9em}
 #stName{overflow:hidden;text-overflow:ellipsis}
 #agenda{display:flex;gap:clamp(6px,.7vw,12px);flex:none}
-.agi{position:relative;width:calc(var(--topH) - 28px);height:calc(var(--topH) - 28px);border-radius:50%;background:#fff;box-shadow:inset 0 0 0 3px var(--line2);display:grid;place-items:center;transition:transform .3s var(--pop),background .3s}
+.agi{position:relative;width:calc(var(--topH) - 28px);height:calc(var(--topH) - 28px);border:0;padding:0;cursor:pointer;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 3px var(--line2);display:grid;place-items:center;transition:transform .3s var(--pop),background .3s}
 .agi svg{width:66%;height:66%}
 .agi.cur{box-shadow:inset 0 0 0 4px var(--gold),0 0 0 5px rgba(255,201,60,.35);transform:scale(1.1)}
 .agi.done{background:var(--lime);box-shadow:inset 0 0 0 3px var(--limeD)}
@@ -129,13 +129,6 @@ svg{display:block}
 .wig{animation:wiggle calc(var(--sp) * 2.4s) ease-in-out infinite;transform-origin:50% 80%}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 
-/* transition stamp: "Stop!" (palm) then "Look!" — never blocks a tap */
-#tx{position:fixed;inset:0;z-index:30;pointer-events:none;display:grid;place-items:center}
-#tx .txc{grid-area:1/1;display:flex;align-items:center;gap:.35em;padding:.25em .7em .25em .4em;border-radius:999px;background:#fff;font-weight:700;font-size:clamp(44px,10vh,100px);box-shadow:0 0 0 6px var(--ink),0 30px 60px -20px rgba(28,37,65,.55);opacity:0}
-#tx .txc svg{width:1.2em;height:1.2em}
-#tx .stop{color:var(--red);animation:stamp calc(var(--sp) * .62s) var(--pop) both}
-#tx .look{color:var(--greenD);animation:stamp calc(var(--sp) * .62s) var(--pop) calc(var(--sp) * .58s) both}
-@keyframes stamp{0%{opacity:0;transform:scale(.4) rotate(-8deg)}30%{opacity:1;transform:scale(1.05) rotate(-3deg)}75%{opacity:1;transform:scale(1) rotate(-3deg)}100%{opacity:0;transform:scale(1.1) rotate(-3deg)}}
 
 /* ---------- 1 Good morning ---------- */
 .morning{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:4vw;max-width:1500px;width:100%}
@@ -176,7 +169,7 @@ svg{display:block}
 .agb .tk svg{width:70%;height:70%}
 .agb.done .tk{display:grid;animation:pop .45s var(--pop)}
 
-/* ---------- 3 + 10 the story ---------- */
+/* ---------- 3 + 9 the story ---------- */
 .story{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:2.6vw;align-items:center;width:100%;height:100%;max-width:1760px}
 .panel{overflow:hidden;padding:0;aspect-ratio:400/260;width:100%;max-height:100%;justify-self:center;border-radius:var(--r)}
 .panel>svg{width:100%;height:100%;border-radius:var(--r)}
@@ -206,6 +199,7 @@ svg{display:block}
 .stopme .big{width:min(58vh,46vw);height:min(58vh,46vw)}
 .stopme .ready{width:min(58vh,46vw);height:min(58vh,46vw);display:grid;place-items:center;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);background-image:radial-gradient(circle,var(--lime) 0 18%,transparent 19%);background-size:44px 44px}
 .stopme .ready svg{width:46%}
+.hint .en{font-size:clamp(26px,4.6vh,46px);font-weight:700;color:var(--ink)}
 .hint{position:absolute;right:0;top:0;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:22px}
 .hint .pic{width:clamp(74px,13vh,128px);height:clamp(74px,13vh,128px)}
 .hint .palm{width:clamp(38px,6vh,60px)}
@@ -250,19 +244,9 @@ svg{display:block}
 .wopt.dim{opacity:.3}
 .wopt.sel{box-shadow:0 0 0 6px var(--gold),var(--shadow)}
 .pointer{position:absolute;top:calc(clamp(60px,10vh,100px) * -.85);left:50%;width:clamp(60px,10vh,100px);margin-left:calc(clamp(60px,10vh,100px) * -.5);animation:point calc(var(--sp) * 1s) ease-in-out infinite;z-index:3}
+.wopt .num{position:absolute;left:14px;top:12px;width:clamp(44px,7vh,68px);height:clamp(44px,7vh,68px);border-radius:50%;background:var(--ink);color:#fff;font-style:normal;font-weight:700;font-size:clamp(28px,4.8vh,46px);display:grid;place-items:center}
 
-/* ---------- 8 Build the word ---------- */
-.build{display:grid;grid-template-columns:auto auto;gap:2vh 4vw;align-items:center}
-.build .goalpic{width:min(40vh,30vw);height:min(40vh,30vw);grid-row:1/3}
-.build .goalpic .q{width:100%;height:100%;display:grid;place-items:center;font-size:clamp(90px,22vh,220px);font-weight:700;color:var(--line2);border-radius:var(--r);border:5px dashed var(--line2)}
-.slots{display:flex;gap:14px;align-items:center}
-.slot1{width:clamp(80px,15vh,150px);height:clamp(96px,18vh,180px);border-radius:22px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 4px var(--ink2);display:grid;place-items:center;font-size:clamp(64px,13vh,130px);font-weight:700}
-.slot1.f{background:#fff;box-shadow:inset 0 0 0 4px var(--green),0 6px 0 rgba(35,134,74,.2)}
-.tiles{display:flex;gap:18px;flex-wrap:wrap}
-.tile{width:clamp(78px,14vh,140px);height:clamp(78px,14vh,140px);border:0;border-radius:24px;background:var(--gold);box-shadow:0 7px 0 var(--goldD);font-size:clamp(54px,10vh,100px);font-weight:700;color:var(--ink);transition:opacity .25s,transform .1s}
-.tile.used{opacity:0;pointer-events:none;transform:scale(.6)}
-
-/* ---------- 9 Is it a…? ---------- */
+/* ---------- 8 Is it a…? ---------- */
 .isit{display:grid;grid-template-columns:1fr auto 1fr;gap:2.6vw;align-items:center;width:100%;max-width:1700px}
 .half{display:flex;flex-direction:column;align-items:center;gap:2vh;padding:3vh 1.6vw;border-radius:var(--r);background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 3px var(--line2);transition:transform .4s var(--pop)}
 .half .hd{display:flex;align-items:center;gap:.5em;font-size:clamp(28px,5.2vh,52px);font-weight:700}
@@ -274,7 +258,7 @@ svg{display:block}
 .isit .center{width:min(54vh,30vw);height:min(54vh,30vw)}
 .swapflip{animation:pop calc(var(--sp) * .45s) var(--pop) both}
 
-/* ---------- 11 Peek! ---------- */
+/* ---------- 10 Peek! ---------- */
 .peek{display:grid;grid-template-columns:1fr auto 1fr;gap:2.6vw;align-items:center;width:100%;max-width:1700px}
 .peekbox{position:relative;width:min(60vh,36vw);height:min(60vh,36vw);overflow:hidden;padding:0}
 .peekbox .pic{position:absolute;inset:7%}
@@ -286,27 +270,9 @@ svg{display:block}
 .peek .side{display:flex;flex-direction:column;align-items:center;gap:2.4vh}
 .peek .bub{font-size:clamp(28px,5.6vh,58px)}
 .peek .ctrl{display:flex;gap:14px}
-
-/* ---------- 12 Read and match ---------- */
-.match{display:flex;flex-direction:column;align-items:center;gap:4vh;width:100%}
-.strip{display:flex;align-items:center;gap:2vw;padding:3vh 3vw;max-width:94vw}
-.strip .thumb{width:clamp(150px,26vh,270px);flex:none;border-radius:16px;overflow:hidden;box-shadow:0 0 0 3px var(--line2)}
-.strip .thumb svg{width:100%;height:auto}
-.sent{font-size:clamp(40px,8.4vh,86px);font-weight:600;line-height:1.2;position:relative;margin:0}
-.sent .ul{position:absolute;left:0;bottom:-.12em;height:.12em;width:0;background:var(--gold);border-radius:9px}
-.sent .ul.go{animation:sweep calc(var(--sp) * 2.4s) linear both}
-@keyframes sweep{to{width:100%}}
-.chunk{display:flex;flex-direction:column;gap:2.4vh;align-items:stretch}
-.chunk .bub{display:flex;align-items:center;gap:.4em;font-size:clamp(36px,7.4vh,76px);text-align:start}
-.chunk .bub svg{width:.9em;height:.9em;flex:none}
-.pics3{display:flex;gap:3vw}
-.pics3 .pcard{width:min(36vh,24vw);height:min(36vh,24vw);border:0;cursor:pointer}
 .gap{display:inline-block;min-width:4.2em;border-bottom:.08em solid var(--ink);text-align:center;color:var(--greenD)}
-.choices{display:flex;gap:3vw}
-.choice{font-size:clamp(50px,11vh,110px);padding:2vh 3vw;border:0;font-weight:700}
-.choice.right{box-shadow:0 0 0 7px var(--green),var(--shadow)}
 
-/* ---------- 13 Guess my mime ---------- */
+/* ---------- 11 Guess my mime ---------- */
 .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4vw;width:min(94vw,1600px)}
 .rule{display:flex;flex-direction:column;align-items:center;gap:1.4vh;padding:3vh 1.4vw 2.6vh}
 .rule .n{position:absolute;left:-14px;top:-14px;width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:28px}
@@ -331,7 +297,7 @@ svg{display:block}
 .role i.B{background:var(--sky)}
 .tracks{flex:1;display:flex;flex-direction:column;gap:10px}
 .track{position:relative;height:clamp(50px,7.4vh,72px);border-radius:999px;background:#fff;box-shadow:inset 0 0 0 3px var(--line2);overflow:hidden;cursor:pointer}
-.track .fill{position:absolute;left:0;top:0;bottom:0;background:var(--lime);border-radius:999px}
+.track .body{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .track .lbl{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-weight:700;font-size:clamp(18px,3vh,30px);color:var(--ink2)}
 .track .mk{position:absolute;top:50%;transform:translateY(-50%);height:88%;aspect-ratio:1.4}
 .track .mk svg{width:100%;height:100%}
@@ -342,7 +308,7 @@ svg{display:block}
 .swapban .in{display:flex;align-items:center;gap:.4em;font-size:clamp(70px,16vh,160px);font-weight:700;background:#fff;border-radius:40px;padding:.2em .6em;box-shadow:0 0 0 8px var(--gold);animation:pop calc(var(--sp) * .5s) var(--pop) both}
 .swapban .in svg{width:1em;height:1em}
 
-/* ---------- 14 Snake chain ---------- */
+/* ---------- 12 Snake chain ---------- */
 .chainwrap{display:flex;flex-direction:column;align-items:center;gap:3vh;width:100%}
 .chain{position:relative;display:flex;align-items:center;min-height:clamp(150px,27vh,260px)}
 .chain .body{position:absolute;left:40px;right:60px;top:50%;height:44%;transform:translateY(-50%);border-radius:999px;background:var(--green);box-shadow:inset 0 0 0 5px var(--ink),inset 0 -14px 0 rgba(35,134,74,.6);
@@ -375,6 +341,8 @@ svg{display:block}
 .mfoot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:2vh}
 .mkeys{font-size:clamp(15px,2.2vh,20px);color:var(--ink2);line-height:1.7;margin:2vh 0 0}
 .kbd{display:inline-block;min-width:1.6em;padding:0 .4em;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 2px var(--line2);text-align:center;font-weight:600;color:var(--ink)}
+#legend{position:fixed;left:12px;bottom:6px;z-index:6;display:flex;gap:14px;font-size:13px;color:var(--ink2);opacity:.6;pointer-events:none}
+#legend .kbd{font-size:12px;padding:0 .35em;margin-right:.2em}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:35}
 </style>
 </head>
@@ -391,7 +359,7 @@ svg{display:block}
   </div>
 </header>
 <main id="screen"></main>
-<div id="tx"></div>
+<div id="legend" aria-hidden="true"></div>
 <div id="menu" hidden>
   <div class="box card">
     <h2><span>The letter S: Snake · <span id="totalNet"></span> minutes</span><button class="btn" id="testSound"></button><button class="ib" id="closeMenu" aria-label="Close"></button></h2>
@@ -411,7 +379,7 @@ const LESSON = {
   words: [
     { id: "snake", he: "נחש", gesture: "hand wiggles like a snake", g: "wiggle" },
     { id: "scissors", he: "מספריים", gesture: "two fingers cut", g: "cut" },
-    { id: "star", he: "כוכב", gesture: "hands open and close", g: "twinkle" },
+    { id: "star", he: "כוכב", gesture: "arms and legs out wide", g: "jump" },
     { id: "sad", he: "עצוב", gesture: "a tear down the cheek", g: "tear" },
     { id: "school", he: "בית ספר", gesture: "hands make a roof", g: "roof" },
     { id: "stop", he: "עצור", gesture: "palm out, arm straight", g: "palm" }
@@ -448,17 +416,13 @@ const LESSON = {
   },
   hebrew: {
     goal: "אני יכול/ה להגיד ולקרוא 6 מילים עם S",
-    stopme: "כשרואים את התמונה – עוצרים אותי: <span class=\"en\">Stop!</span>",
+    stopme: "שומעים את המילה. כשרואים את התמונה – עוצרים אותי: <span class=\"en\">Stop!</span>",
     closeEyes: "עוצמים עיניים!",
-    whichVoice: "שומעים – ומצביעים על המילה",
+    whichVoice: "שומעים – ומראים באצבעות: 1, 2 או 3",
     whichSilent: "קוראים לבד, עושים את התנועה ואומרים את המילה",
-    build: "בונים את המילה – כולם אומרים כל אות",
     isit: "חצי כיתה שואל, חצי כיתה עונה – ואז מתחלפים",
     hiss: "שומעים מילה עם S? עושים <span class=\"en\">sss</span> ואת התנועה",
     peek: "שואלים: <span class=\"en\">Is it a …?</span>",
-    echo: "קוראים אחריי",
-    matchA: "קוראים את המשפט ומצביעים על התמונה",
-    matchB: "איזו מילה חסרה? קוראים את כל המשפט",
     rules: "<span class=\"en\">A</span> בוחר/ת מילה בסוד. <span class=\"en\">B</span> שואל/ת: <span class=\"en\">Is it a …?</span> עד שהתשובה <span class=\"en\">Yes, it is!</span> – ואז שניכם עושים את התנועה. בצלצול מתחלפים.",
     chain: "כל שורה אומרת את כל המילים – ומוסיפה מילה אחת"
   },
@@ -467,11 +431,10 @@ const LESSON = {
     { id: "say", name: "Say" },
     { id: "read", name: "Read" },
     { id: "ask", name: "Ask" },
-    { id: "match", name: "Read and match" },
     { id: "pairs", name: "Pair game" },
     { id: "chain", name: "Snake chain" }
   ],
-  // net = minutes of teaching (30), lp = the lesson-plan form's minutes (40); ag = the agenda item it belongs to
+  // net = minutes of teaching (26), lp = the lesson-plan form's minutes (35); ag = the agenda item it belongs to
   stages: [
     { name: "Good morning", net: 1, lp: 2, game: "morning", ag: -1 },
     { name: "Snake reveal", net: 1, lp: 2, game: "reveal", ag: -1 },
@@ -480,13 +443,11 @@ const LESSON = {
     { name: "What's missing?", net: 2, lp: 3, game: "missing", ag: 1 },
     { name: "Read with me", net: 1.5, lp: 2, game: "read", ag: 2 },
     { name: "Which word?", net: 2, lp: 3, game: "which", ag: 2 },
-    { name: "Build the word", net: 2, lp: 2, game: "build", ag: 2 },
     { name: "Is it a…?", net: 2, lp: 3, game: "isit", ag: 3 },
     { name: "Hiss when you hear S!", net: 2, lp: 2, game: "hiss", ag: 3 },
     { name: "Peek!", net: 2, lp: 3, game: "peek", ag: 3 },
-    { name: "Read and match", net: 2, lp: 3, game: "match", ag: 4 },
-    { name: "Guess my mime (pairs)", net: 5, lp: 5, game: "mime", ag: 5 },
-    { name: "Snake chain", net: 2, lp: 3, game: "chain", ag: 6 }
+    { name: "Guess my mime (pairs)", net: 5, lp: 5, game: "mime", ag: 4 },
+    { name: "Snake chain", net: 2, lp: 3, game: "chain", ag: 5 }
   ],
   settings: {
     stopTargets: ["school", "scissors", "sad", "star", "snake"],
@@ -500,13 +461,7 @@ const LESSON = {
       { w: "stop", opts: ["sad", "stop", "star"], silent: true },
       { w: "snake", opts: ["scissors", "school", "snake"], silent: true }
     ],
-    build: [{ w: "star", extra: "n" }, { w: "sad", extra: "p" }, { w: "stop", extra: "a" }],
     isit: [["star", "star"], ["school", "snake"], ["sad", "sad"], ["stop", "scissors"], ["snake", "snake"], ["scissors", "star"]],
-    echo: ["Sam goes to school.", "Sam cuts a star.", "Look! A snake!"],
-    echoPanels: [0, 2, 3],
-    matchPics: ["school", "star", "snake"],
-    gapLine: ["Sam goes to", "."],
-    gapChoices: ["school", "star"],
     mimeHalfSeconds: 105,
     peekStepMs: 900
   }
@@ -766,7 +721,8 @@ const GEST = {
   cut: () => V("0 0 100 100", `<path d="M36 92 V58 Q36 48 48 48 H60 Q68 48 68 58 V92" fill="${P.skin}" stroke-width="4"/>
       <rect x="38" y="16" width="10" height="40" rx="5" fill="${P.skin}" transform="rotate(-14 43 56)" stroke-width="4"/><rect x="52" y="16" width="10" height="40" rx="5" fill="${P.skin}" transform="rotate(16 57 56)" stroke-width="4"/>
       <path d="M22 26 l-8 -4 M20 40 h-9 M78 26 l8 -4 M80 40 h9" stroke="${P.coral}" stroke-width="4"/>`, 4),
-  twinkle: () => V("0 0 100 100", `${HAND(28, 56, .48, -12)}${HAND(72, 56, .48, 12)}${spark(50, 18, .9)}${spark(12, 18, .55)}${spark(88, 18, .55)}`, 4),
+  jump: () => V("0 0 100 100", `<path d="M50 34 V62 M50 40 L14 20 M50 40 L86 20 M50 62 L24 94 M50 62 L76 94" stroke-width="13"/><path d="M50 34 V62 M50 40 L14 20 M50 40 L86 20 M50 62 L24 94 M50 62 L76 94" stroke="${P.skin}" stroke-width="6"/>
+      <circle cx="50" cy="20" r="12" fill="${P.skin}" stroke-width="4"/><path d="M50 9 Q40 9 38 17 Q46 11 50 12 Z" fill="${P.hair}" stroke-width="3"/>${spark(14, 62, .5)}${spark(86, 62, .5)}`, 4),
   wiggle: () => V("0 0 100 100", `<path d="M10 62 Q24 44 38 62 T66 62" fill="none" stroke="${P.green}" stroke-width="5" stroke-dasharray="2 8"/>
       <path d="M58 48 Q84 46 92 56 Q86 66 58 66 Q50 57 58 48 Z" fill="${P.skin}" stroke-width="4"/><path d="M68 48 V44" stroke-width="3"/>`, 4),
   palm: () => V("0 0 100 100", `${HAND(50, 50, .9)}`, 4),
@@ -782,7 +738,6 @@ const AGI = {
   say: () => V("0 0 100 100", `<path d="M16 22 H84 Q90 22 90 28 V62 Q90 68 84 68 H42 L26 82 V68 H16 Q10 68 10 62 V28 Q10 22 16 22 Z" fill="${P.green}"/><path d="M34 45 h4 M46 36 v18 M56 32 v26 M66 40 v10" stroke="#fff" stroke-width="5"/>`, 4.5),
   read: () => V("0 0 100 100", `<rect x="10" y="22" width="80" height="58" rx="10" fill="#fff"/><text x="50" y="66" text-anchor="middle" font-family="Fredoka,Arial" font-weight="700" font-size="40" fill="${P.greenD}" stroke="none">Ss</text>`, 4.5),
   ask: () => V("0 0 100 100", `<path d="M50 14 C74 14 90 28 90 46 C90 64 74 76 52 76 L30 88 L34 72 C18 66 10 56 10 46 C10 28 26 14 50 14 Z" fill="${P.gold}"/><text x="50" y="62" text-anchor="middle" font-family="Fredoka,Arial" font-weight="700" font-size="40" fill="${INK}" stroke="none">?</text>`, 4.5),
-  match: () => V("0 0 100 100", `<rect x="6" y="18" width="48" height="30" rx="6" fill="#fff"/><path d="M14 30 H44 M14 38 H34" stroke-width="4"/><path d="M30 54 Q32 72 52 74" fill="none" stroke-width="4"/><path d="M46 68 L54 74 L46 80" fill="none" stroke-width="4"/><rect x="58" y="52" width="36" height="36" rx="6" fill="#fff"/>${`<polygon points="${starPts(76, 71, 12)}" fill="${P.gold}" stroke-width="3"/>`}`, 4.5),
   pairs: () => V("0 0 100 100", `<circle cx="30" cy="54" r="16" fill="${P.skin}"/><path d="M14 52 Q16 34 30 36 Q44 34 46 52 Q38 44 30 46 Q22 44 14 52 Z" fill="${P.hair}" stroke-width="3"/><path d="M8 94 Q10 72 30 72 Q50 72 52 94 Z" fill="${P.coral}"/>
       <circle cx="70" cy="54" r="16" fill="${P.skin}"/><path d="M54 52 Q56 34 70 36 Q84 34 86 52 Q78 44 70 46 Q62 44 54 52 Z" fill="#8a5a2b" stroke-width="3"/><path d="M48 94 Q50 72 70 72 Q90 72 92 94 Z" fill="${P.blue}"/>
       <path d="M38 8 H62 Q66 8 66 12 V24 Q66 28 62 28 H54 L50 34 L46 28 H38 Q34 28 34 24 V12 Q34 8 38 8 Z" fill="#fff" stroke-width="3.5"/><text x="50" y="25" text-anchor="middle" font-family="Fredoka,Arial" font-weight="700" font-size="18" fill="${INK}" stroke="none">?</text>`, 4),
@@ -845,9 +800,21 @@ function tone(f, d, o = {}) {
   g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + (o.att || .01)); g.gain.exponentialRampToValueAtTime(.0001, t + d);
   osc.connect(g); g.connect(MASTER); osc.start(t); osc.stop(t + d + .05);
 }
+const noiseBuf = a => { if (!NOISE) { NOISE = a.createBuffer(1, a.sampleRate, a.sampleRate); const c = NOISE.getChannelData(0); for (let i = 0; i < c.length; i++) c[i] = Math.random() * 2 - 1; } return NOISE; };
+// the snake's long "sssss": noise through two high-passes, a presence peak near 6.5 kHz, a soft top; a quick start, a long hold, a fade
+const SSS = [["highpass", 3800, .9], ["highpass", 3800, .6], ["peaking", 6500, 1.2, 7], ["lowpass", 11000, .7]];
+function hissy(d) {
+  const a = ac(); if (!a) return;
+  const t = a.currentTime, s = a.createBufferSource(), g = a.createGain(); let n = s;
+  s.buffer = noiseBuf(a); s.loop = true;
+  for (const [type, f, q, gain] of SSS) { const b = a.createBiquadFilter(); b.type = type; b.frequency.value = f; b.Q.value = q; if (gain != null) b.gain.value = gain; n.connect(b); n = b; }
+  n.connect(g); g.connect(MASTER);
+  g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.55, t + Math.min(.22, d * .15)); g.gain.linearRampToValueAtTime(.5, t + d * .7); g.gain.linearRampToValueAtTime(0, t + d);
+  s.start(t); s.stop(t + d + .05);
+}
 function noise(d, o = {}) {
   const a = ac(); if (!a) return;
-  if (!NOISE) { NOISE = a.createBuffer(1, a.sampleRate, a.sampleRate); const c = NOISE.getChannelData(0); for (let i = 0; i < c.length; i++) c[i] = Math.random() * 2 - 1; }
+  noiseBuf(a);
   const t = a.currentTime + (o.at || 0), s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(), v = o.vol ?? .2;
   s.buffer = NOISE; s.loop = true; f.type = o.ft || "bandpass"; f.frequency.value = o.f || 1500; f.Q.value = o.q || .8;
   g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + (o.att || .005));
@@ -856,8 +823,7 @@ function noise(d, o = {}) {
   s.connect(f); f.connect(g); g.connect(MASTER); s.start(t); s.stop(t + d + .05);
 }
 const SFX0 = {
-  // the snake's "sssss": filtered noise, a soft start, a long hold, a fade
-  hiss(d = 1.8) { noise(d, { f: 6200, q: 1.4, vol: .34, att: .18, hold: d * .7 }); noise(d, { ft: "highpass", f: 8000, vol: .12, att: .25, hold: d * .6 }); },
+  hiss(d = 1.8) { hissy(d); },
   pop() { noise(.09, { f: 2200, q: .6, vol: .5 }); tone(700, .12, { to: 180, type: "triangle", vol: .3 }); },
   soft() { tone(330, .25, { to: 220, vol: .12 }); },
   ding() { tone(1318, 1.1, { vol: .2 }); tone(2637, .6, { vol: .05 }); },
@@ -927,7 +893,7 @@ function makeScope() {
 }
 const dotsHTML = (n, i, ok = -1, eyes = []) => `<div class="dots">${Array.from({ length: n }, (_, k) => `<i class="${k === i ? "on" : ""} ${k < ok ? "ok" : ""} ${eyes.includes(k) ? "eye" : ""}"></i>`).join("")}</div>`;
 const setItem = (el, i, state = "") => { el.dataset.item = i; el.dataset.state = state; };
-const isGo = k => k === " " || k === "Enter";
+const isGo = k => k === " ";
 function noRepeats(list) { for (let n = 0; n < 200; n++) { const s = shuffle(list); if (s.every((x, k) => k === 0 || x !== s[k - 1])) return s; } return list; }
 const agendaBig = (doneUpTo = 0) => `<div class="agbig">${LESSON.agenda.map((a, k) => `<div class="agb ${k < doneUpTo ? "done" : ""}" data-ag="${a.id}"><div class="ci">${AGI[a.id]()}<i class="tk">${ICON.tick}</i></div><span>${a.name}</span></div>`).join("")}</div>`;
 function sssFly(from, n = 1) {
@@ -949,7 +915,7 @@ GAMES.morning = el => {
     <div><h1>${T.morning}</h1><p class="q">${T.howAreYou}</p><p class="q">${T.whatDay}</p>
     <div class="datecard card tape"><span class="dd">${day}</span><span class="dm">${rest}</span></div></div></div>`;
   setItem(el, 0);
-  return { keys: "Space: the date bounces", onKey(k) { if (isGo(k)) { restart($(".datecard", el), "bounce"); SFX.sparkle(); return true; } } };
+  return { keys: [["Space", "the date bounces"]], onKey(k) { if (isGo(k)) { restart($(".datecard", el), "bounce"); SFX.sparkle(); return true; } } };
 };
 
 /* 2. Snake reveal: the snake slides in (hiss) → "What is it?" → It's a snake! → topic, goal, agenda */
@@ -979,7 +945,7 @@ GAMES.reveal = (el, sc) => {
   function answer() { const a = $("#ans", el); a.className = "bub yes pop"; a.innerHTML = `${T.itsA} ${wHTML("snake")}!`; answered = true; el.dataset.state = "answered"; SFX.sparkle(); }
   render();
   return {
-    keys: "Space: the snake again (hiss) · Enter: It’s a snake! · →: the letter S, then the goal and today’s plan",
+    keys: [["Space", "hiss again"], ["Enter", "It’s a snake!"]],
     onKey(k) {
       if (k === " " && step === 0) return slide(), true;
       if (k === " " && step === 1) { SFX.hiss(1.4); sssFly($(".coil", el), 3); return true; }
@@ -1017,7 +983,7 @@ GAMES.story = (el, sc) => {
   const move = d => { const n = i + d; if (n < 0 || n > 6) return false; i = n; who = -1; render(); return true; };
   render();
   return {
-    keys: "Space: say the S word · Enter: class → girls → boys repeat · ← →: story lines · tap the panel on line 4: hiss",
+    keys: [["Space", "say the word"], ["Enter", "class → girls → boys"]],
     onKey(k) {
       const w = LESSON.story[i].word;
       if (k === " " && w) { speak(w); restart($(".wcard", el), "bounce"); return true; }
@@ -1028,7 +994,7 @@ GAMES.story = (el, sc) => {
   };
 };
 
-/* 4. Stop me when…: single pictures, the class shouts Stop! at the target. ← (and →) = next picture */
+/* 4. Stop me when…: the teacher plays the target word (Space / Enter, never by itself); single pictures; the class shouts Stop! at the target. ← (and →) = next picture */
 GAMES.stopme = (el, sc) => {
   const targets = S.stopTargets;
   let r = 0, seq = [], pos = -1, stopped = false;
@@ -1041,8 +1007,8 @@ GAMES.stopme = (el, sc) => {
     const cur = pos >= 0 ? seq[pos] : null;
     el.innerHTML = `<div class="stopme">
       <button class="btn spk spkc" aria-label="Say the word">${ICON.speaker}</button>
-      ${r === 0 ? `<div class="hint card" data-word="${targets[r]}"><div class="palm">${ICON.palm}</div>${pic(targets[r])}</div>` : ""}
-      ${cur ? pcard(cur, { cls: "big " + (stopped ? "right" : ""), extra: "" }) : `<div class="ready">${ICON.palm}</div>`}
+      <div class="hint card"><div class="palm">${ICON.ear}</div><span class="en">Listen!</span></div>
+      ${cur ? pcard(cur, { cls: "big " + (stopped ? "right" : ""), extra: "" }) : `<div class="ready">${ICON.ear}</div>`}
       <div class="rounds">${targets.map((t, k) => `<i class="${k === r ? "on" : k < r ? "ok" : ""}">${k < r ? ART[t]() : ""}</i>`).join("")}</div>
       ${heLine(H.stopme, "").replace('class="he "', 'class="he" style="position:absolute;right:0;bottom:0"')}</div>`;
     $(".spkc", el).onclick = () => speak(targets[r]);
@@ -1053,21 +1019,22 @@ GAMES.stopme = (el, sc) => {
   function newRound() { seq = makeRun(targets[r]); pos = -1; stopped = false; render(); }
   function advance() {
     if (stopped) { if (r >= targets.length - 1) return false; r++; newRound(); return true; }
+    if (pos >= seq.length - 1) seq.push(...makeRun(targets[r]));
     pos++; render(); SFX.whoosh(); return true;
   }
   function stop() {
     const b = document.createElement("div"); b.className = "burst"; b.innerHTML = BURST; el.appendChild(b);
     SFX.stop(); sc.after(1300, () => b.remove());
-    if (pos >= 0 && seq[pos] === targets[r] && !stopped) { stopped = true; sc.after(700, () => { render(); speak(targets[r]); SFX.sparkle(); }); }
+    if (pos >= 0 && seq[pos] === targets[r] && !stopped) { stopped = true; const rr = r; sc.after(700, () => { if (r !== rr || !stopped) return; render(); SFX.sparkle(); }); }
     el.dataset.burst = String(+(el.dataset.burst || 0) + 1);
   }
   newRound();
   return {
-    keys: "← or →: next picture · S or Enter: STOP! · after the target, ← or →: next round",
+    keys: [["Space", "hear the word"], ["S", "STOP!"]],
     onKey(k) {
-      if (k === "s" || k === "S" || k === "Enter") return stop(), true;
-      if (k === "ArrowLeft") { if (advance() === false) return true; return true; }
-      if (k === "ArrowRight") return advance();
+      if (k === " " || k === "Enter") return speak(targets[r]), true;
+      if (k === "s" || k === "S") return stop(), true;
+      if (k === "ArrowLeft" || k === "ArrowRight") { if (!advance()) nextStage(); return true; }   // ← is "next" here too, so it never steps back a stage
     }
   };
 };
@@ -1094,7 +1061,7 @@ GAMES.missing = (el, sc) => {
   }
   render();
   return {
-    keys: "Space: close eyes → open (What’s missing?) → show it → It’s a … · ← →: rounds",
+    keys: [["Space", "next step"]],
     onKey(k) {
       if (isGo(k)) return space(), true;
       if (k === "ArrowRight") { if (r >= rounds.length - 1) return false; r++; phase = "look"; render(); return true; }
@@ -1114,7 +1081,7 @@ GAMES.read = el => {
   }
   render();
   return {
-    keys: "Space: hear the word · ← →: next card",
+    keys: [["Space", "hear the word"]],
     onKey(k) {
       if (isGo(k)) { speak(list[i]); restart($(".readc .w", el), "bounce"); return true; }
       if (k === "ArrowRight") { if (i >= 5) return false; i++; render(); return true; }
@@ -1123,14 +1090,14 @@ GAMES.read = el => {
   };
 };
 
-/* 7. Which word?: 1–4 the voice says it, 3 written words; 5–6 silent, the teacher points, the class gestures and says it */
+/* 7. Which word?: 1–4 the voice says it, 3 numbered written words, the class shows 1, 2 or 3 fingers; 5–6 silent, the teacher points, the class gestures and says it */
 GAMES.which = (el, sc) => {
   const items = S.which; let i = 0, revealed = false, sel = null;
   function render() {
     const it = items[i]; revealed = false; sel = it.silent ? it.w : null;
     el.innerHTML = `<div class="which">
       <div class="cue">${it.silent ? ICON.eye.replace("<svg", '<svg class="ic"') + `<span class="en">Read it! Show me!</span>` : `<button class="btn spk" data-say="${it.w}" aria-label="Hear it">${ICON.speaker}</button><span class="en">Which word?</span>`}</div>
-      <div class="wopts">${it.opts.map(o => `<button class="wopt card ${o === sel ? "sel" : ""}" data-word="${o}">${o === sel ? `<div class="pointer">${ICON.hand}</div>` : ""}<div class="rv">${pic(o)}<div class="g">${GEST[WB[o].g]()}</div></div><span class="w">${o}</span></button>`).join("")}</div>
+      <div class="wopts">${it.opts.map((o, k) => `<button class="wopt card ${o === sel ? "sel" : ""}" data-word="${o}"><i class="num">${k + 1}</i>${o === sel ? `<div class="pointer">${ICON.hand}</div>` : ""}<div class="rv">${pic(o)}<div class="g">${GEST[WB[o].g]()}</div></div><span class="w">${o}</span></button>`).join("")}</div>
       ${heLine(it.silent ? H.whichSilent : H.whichVoice)}</div>${dotsHTML(items.length, i, i, items.map((x, k) => x.silent ? k : -1))}`;
     $$("[data-say]", el).forEach(b => b.onclick = () => speak(b.dataset.say));
     $$(".wopt", el).forEach(b => b.onclick = () => { if (revealed) { speak(b.dataset.word); return; } point(b.dataset.word); });
@@ -1149,7 +1116,7 @@ GAMES.which = (el, sc) => {
   }
   render();
   return {
-    keys: "Space: show the answer (picture + gesture) and hear it · tap a word: point at it · ← →: items (5 and 6 are silent)",
+    keys: [["Space", "show the answer"]],
     onKey(k) {
       if (isGo(k)) return reveal(), true;
       if (k === "ArrowRight") { if (i >= items.length - 1) return false; i++; render(); return true; }
@@ -1158,69 +1125,29 @@ GAMES.which = (el, sc) => {
   };
 };
 
-/* 8. Build the word: star, sad, stop. The voice says it; one pupil taps the letters; the class says each letter */
-GAMES.build = (el, sc) => {
-  const items = S.build; let i = 0, n = 0;
-  function render() {
-    const it = items[i], letters = shuffle([...it.w, it.extra]); n = 0;
-    el.innerHTML = `<div class="build"><div class="goalpic" data-word="${it.w}"><div class="q">?</div></div>
-      <div class="slots"><button class="btn spk" aria-label="Hear it">${ICON.speaker}</button>${[...it.w].map(() => `<div class="slot1"></div>`).join("")}</div>
-      <div class="tiles">${letters.map((c, k) => `<button class="tile" data-c="${c}" data-k="${k}">${c}</button>`).join("")}</div></div>
-      ${heLine(H.build)}${dotsHTML(items.length, i, i)}`;
-    $(".spk", el).onclick = () => speak(it.w);
-    $$(".tile", el).forEach(b => b.onclick = () => tap(b));
-    el.dataset.word = it.w; setItem(el, i, "build");
-    sc.after(450, () => speak(it.w));
-  }
-  function tap(b) {
-    const w = items[i].w; if (n >= w.length) return;
-    if (b.dataset.c !== w[n]) { restart(b, "shake"); SFX.soft(); el.dataset.wrong = String(+(el.dataset.wrong || 0) + 1); return; }
-    b.classList.add("used"); const s = $$(".slot1", el)[n]; s.textContent = w[n]; s.classList.add("f"); restart(s, "pop"); SFX.pop(); n++;
-    el.dataset.built = w.slice(0, n);
-    if (n === w.length) done();
-  }
-  function done() {
-    const w = items[i].w, g = $(".goalpic", el);
-    g.innerHTML = pcard(w, { label: true, cls: "right pop" }).replace('class="pcard', 'style="width:100%;height:100%" class="pcard');
-    el.dataset.state = "done"; sc.after(300, () => { speak(w); SFX.cheer(); confettiAt(g, 70); });
-  }
-  const next = () => { const w = items[i].w; const b = $$(".tile:not(.used)", el).find(t => t.dataset.c === w[n]); if (b) tap(b); };
-  render();
-  return {
-    keys: "tap the letters in order · Space: put the next letter · Enter: hear the word · ← →: words",
-    onKey(k) {
-      if (k === " ") return next(), true;
-      if (k === "Enter") return speak(items[i].w), true;
-      if (k === "ArrowRight") { if (i >= items.length - 1) return false; i++; render(); return true; }
-      if (k === "ArrowLeft") { if (i <= 0) return false; i--; render(); return true; }
-    }
-  };
-};
-
-/* 9. Is it a…?: half the class asks, half answers from the picture; Enter swaps the halves */
+/* 8. Is it a…?: half the class asks, half answers from the picture; no voice, only the pupils speak; Enter swaps the halves */
 GAMES.isit = (el, sc) => {
   const items = S.isit; let i = 0, left = "ask", shown = false;
   function halfHTML(role, id) {
     const yes = items[i][0] === id;
     return role === "ask"
-      ? `<div class="half asker swapflip" data-role="ask"><div class="hd">${PEOPLE.cls}Ask!</div><button class="bub q" data-say="${LESSON.questions[id]}">${hardQ(id)}<small>${easyQ(id)}</small></button></div>`
+      ? `<div class="half asker swapflip" data-role="ask"><div class="hd">${PEOPLE.cls}Ask!</div><div class="bub q">${hardQ(id)}<small>${easyQ(id)}</small></div></div>`
       : `<div class="half answer swapflip" data-role="answer"><div class="hd">${PEOPLE.cls}Answer!</div>
-        <button class="bub yes ${shown ? (yes ? "lit" : "off") : ""}" data-say="${T.yes}" data-a="yes">${curly(T.yes)}<small>Yes!</small></button>
-        <button class="bub no ${shown ? (!yes ? "lit" : "off") : ""}" data-say="${T.no}" data-a="no">${curly(T.no)}<small>No!</small></button></div>`;
+        <div class="bub yes ${shown ? (yes ? "lit" : "off") : ""}" data-a="yes">${curly(T.yes)}<small>Yes!</small></div>
+        <div class="bub no ${shown ? (!yes ? "lit" : "off") : ""}" data-a="no">${curly(T.no)}<small>No!</small></div></div>`;
   }
   function render(anim = true) {
     const [pid, qid] = items[i];
     el.innerHTML = `<div class="isit">${halfHTML(left, qid)}${pcard(pid, { cls: "center rise" })}${halfHTML(left === "ask" ? "answer" : "ask", qid)}</div>${heLine(H.isit)}${dotsHTML(items.length, i, i)}`;
     if (!anim) $$(".swapflip", el).forEach(x => x.classList.remove("swapflip"));
-    $$("[data-say]", el).forEach(b => b.onclick = () => speak(b.dataset.say));
     el.dataset.left = left; el.dataset.answer = pid === qid ? "yes" : "no";
     setItem(el, i, shown ? "answered" : "asked");
   }
-  function show() { if (shown) return; shown = true; render(false); const yes = items[i][0] === items[i][1]; speak(yes ? T.yes : T.no); SFX.pop(); }
-  function go1(d) { i += d; shown = false; render(false); sc.after(400, () => speak(LESSON.questions[items[i][1]])); }
-  render(); sc.after(500, () => speak(LESSON.questions[items[0][1]]));
+  function show() { if (shown) return; shown = true; render(false); SFX.pop(); }
+  function go1(d) { i += d; shown = false; render(false); }
+  render();
   return {
-    keys: "Space: show the right answer · Enter: swap the halves · tap a bubble: hear it · ← →: pictures",
+    keys: [["Space", "show the answer"], ["Enter", "swap the halves"]],
     onKey(k) {
       if (k === " ") return show(), true;
       if (k === "Enter") { left = left === "ask" ? "answer" : "ask"; render(); SFX.whoosh(); return true; }
@@ -1230,7 +1157,7 @@ GAMES.isit = (el, sc) => {
   };
 };
 
-/* 10. Hiss when you hear S!: the story again, no highlights; a short hiss on tap */
+/* 9. Hiss when you hear S!: the story again, no highlights; a short hiss on tap */
 GAMES.hiss = el => {
   let i = 0, n = 0;
   function render() {
@@ -1245,7 +1172,7 @@ GAMES.hiss = el => {
   function hiss() { SFX.hiss(.7); sssFly($(".sssbtn", el), 2); n++; el.dataset.hisses = n; el.dataset.state = "hissed"; }
   render();
   return {
-    keys: "Space: a short hiss · ← →: story lines",
+    keys: [["Space", "a short hiss"]],
     onKey(k) {
       if (isGo(k)) return hiss(), true;
       if (k === "ArrowRight") { if (i >= 6) return false; i++; render(); return true; }
@@ -1254,7 +1181,7 @@ GAMES.hiss = el => {
   };
 };
 
-/* 11. Peek!: a hidden picture is uncovered slowly; the class asks "Is it a…?"; Yes / No answers */
+/* 10. Peek!: a hidden picture is uncovered slowly; the class asks "Is it a…?"; Yes / No answers */
 GAMES.peek = (el, sc) => {
   const order = shuffle(WIDS); let i = 0, running = false, timer = null;
   function render() {
@@ -1280,7 +1207,7 @@ GAMES.peek = (el, sc) => {
   function revealAll() { if (el.dataset.state === "revealed") return; stopRun(); $$(".cover i", el).forEach(t => t.classList.add("off")); el.dataset.state = "revealed"; el.dataset.open = 25; sc.after(400, () => { speak(order[i]); SFX.cheer(); confettiAt($(".peekbox", el), 60); }); }
   render();
   return {
-    keys: "Space: start / pause uncovering · Enter: show it all · tap Yes / No: hear the answer · ← →: pictures",
+    keys: [["Space", "uncover / pause"], ["Enter", "show it all"]],
     onKey(k) {
       if (k === " ") return toggle(), true;
       if (k === "Enter") return revealAll(), true;
@@ -1291,59 +1218,7 @@ GAMES.peek = (el, sc) => {
   };
 };
 
-/* 12. Read and match: echo-read 3 lines, then the chunk; (a) read a line, pick its picture; (b) Sam goes to ___. */
-GAMES.match = (el, sc) => {
-  let i = 0, ci = -1, line = Math.random() * 3 | 0;
-  const N = 6;
-  function render() {
-    ci = -1;
-    if (i < 3) {
-      el.innerHTML = `<div class="match"><div class="strip card tape rise"><div class="thumb">${PANELS[S.echoPanels[i]]()}</div><p class="sent">${curly(S.echo[i])}<span class="ul"></span></p></div>${heLine(H.echo)}</div>`;
-      setItem(el, i, "echo");
-    } else if (i === 3) {
-      const ls = [LESSON.questions.star, T.yes, T.no];
-      el.innerHTML = `<div class="match"><div class="chunk">${ls.map((l, k) => `<button class="bub ${k ? (k === 1 ? "yes" : "no") : "q"}" data-say="${l}">${ICON.speaker}<span>${curly(l).replace("star", wHTML("star"))}</span></button>`).join("")}</div>${heLine(H.echo)}</div>`;
-      setItem(el, i, "chunk");
-    } else if (i === 4) {
-      const pics = shuffle(S.matchPics);
-      el.innerHTML = `<div class="match"><div class="strip card tape"><p class="sent">${curly(S.echo[line])}</p></div>
-        <div class="pics3">${pics.map(id => pcard(id, { tag: "button" })).join("")}</div>${heLine(H.matchA)}</div>`;
-      el.dataset.answer = S.matchPics[line];
-      $$(".pics3 .pcard", el).forEach(b => b.onclick = () => { $$(".pics3 .pcard", el).forEach(x => x.classList.toggle("ring", x === b)); });
-      setItem(el, i, "a");
-    } else {
-      el.innerHTML = `<div class="match"><div class="strip card tape"><p class="sent">${S.gapLine[0]} <span class="gap" id="gap">&nbsp;</span>${S.gapLine[1]}</p></div>
-        <div class="choices">${S.gapChoices.map(w => `<button class="choice card w" data-word="${w}">${wHTML(w)}</button>`).join("")}</div>${heLine(H.matchB)}</div>`;
-      el.dataset.answer = "school";
-      $$(".choice", el).forEach(b => b.onclick = () => fill(b.dataset.word));
-      setItem(el, i, "b");
-    }
-    el.insertAdjacentHTML("beforeend", dotsHTML(N, i, i));
-    $$("[data-say]", el).forEach(b => b.onclick = () => speak(b.dataset.say));
-  }
-  function fill(w) {
-    const b = $(`.choice[data-word="${w}"]`, el);
-    if (w !== "school") { restart(b, "shake"); SFX.soft(); return; }
-    const g = $("#gap", el); g.innerHTML = wHTML(w); restart(g, "pop"); b.classList.add("right"); speak(w); SFX.cheer(); el.dataset.state = "filled";
-  }
-  function space() {
-    if (i < 3) { restart($(".sent .ul", el), "go"); SFX.whoosh(); el.dataset.state = "read"; return; }
-    if (i === 3) { ci = (ci + 1) % 3; const bs = $$(".chunk .bub", el); bs.forEach((b, k) => b.classList.toggle("lit", k === ci)); speak(bs[ci].dataset.say); return; }
-    if (i === 4) { const a = el.dataset.answer; $$(".pics3 .pcard", el).forEach(x => { x.classList.remove("ring"); x.classList.toggle("right", x.dataset.word === a); x.classList.toggle("dim", x.dataset.word !== a); }); SFX.cheer(); el.dataset.state = "shown"; return; }
-    fill("school");
-  }
-  render();
-  return {
-    keys: "Space: point along the line (1–3) · play the next line (4) · show the picture (a) · fill the gap (b) · ← →: steps",
-    onKey(k) {
-      if (isGo(k)) return space(), true;
-      if (k === "ArrowRight") { if (i >= N - 1) return false; i++; render(); return true; }
-      if (k === "ArrowLeft") { if (i <= 0) return false; i--; render(); return true; }
-    }
-  };
-};
-
-/* 13. Guess my mime (pairs): how to play, then 6 pictures, the prompts and two 1:45 halves on a left→right timer */
+/* 11. Guess my mime (pairs): how to play, then 6 pictures, the prompts and two 1:45 halves on a left→right snake timer */
 const countdown = (sc, seconds, onTick, onEnd) => {
   let left = seconds * 1000, running = false, last = null, ended = false;
   const api = {
@@ -1379,7 +1254,7 @@ GAMES.mime = (el, sc) => {
         <div class="prompts"><div class="grp e"><span class="bub q" id="qe">${easyQ("star")}</span><span class="bub yes">Yes!</span><span class="bub no">No!</span></div>
           <div class="grp"><button class="bub q" id="qh" data-say="${LESSON.questions.star}"><span>${hardQ("star")}</span></button><button class="bub yes" data-say="${T.yes}">${curly(T.yes)}</button><button class="bub no" data-say="${T.no}">${curly(T.no)}</button></div></div>
         <div class="tiles6">${WIDS.map(id => pcard(id, { label: true, tag: "button", extra: `<div class="gm">${GEST[WB[id].g]()}</div>` })).join("")}</div>
-        <div class="trow"><div class="roles"></div><div class="tracks">${[0, 1].map(h => `<div class="track" data-half="${h}" dir="ltr"><div class="fill"></div><span class="lbl">${h + 1}</span><div class="mk">${V("0 0 140 100", `<path d="M0 60 H60" stroke-width="30"/><path d="M0 60 H60" stroke="${P.green}" stroke-width="20"/><ellipse cx="90" cy="52" rx="40" ry="32" fill="${P.green}" stroke-width="6"/><circle cx="96" cy="42" r="10" fill="#fff" stroke-width="4"/><circle cx="99" cy="43" r="4.5" fill="${INK}" stroke="none"/><path d="M98 66 Q110 72 120 62" fill="none" stroke-width="4"/>`, 5)}</div></div>`).join("")}</div>
+        <div class="trow"><div class="roles"></div><div class="tracks">${[0, 1].map(h => `<div class="track" data-half="${h}" dir="ltr"><svg class="body" aria-hidden="true"></svg><span class="lbl">${h + 1}</span><div class="mk">${V("0 0 140 100", `<path d="M126 56 H138 M134 56 l5 -5 M134 56 l5 5" fill="none" stroke="${P.red}" stroke-width="3.5"/><ellipse cx="90" cy="52" rx="40" ry="32" fill="${P.green}" stroke-width="6"/><circle cx="96" cy="42" r="10" fill="#fff" stroke-width="4"/><circle cx="99" cy="43" r="4.5" fill="${INK}" stroke="none"/><path d="M98 66 Q110 72 120 62" fill="none" stroke-width="4"/>`, 5)}</div></div>`).join("")}</div>
         <div class="ttime">${ICON.clock}<span></span></div></div></div>`;
       $$("[data-say]", el).forEach(b => b.onclick = () => speak(b.dataset.say));
       // tapping a picture: hear it, and the prompts show the question for that word (for the demo)
@@ -1390,9 +1265,17 @@ GAMES.mime = (el, sc) => {
   }
   function toggleHe() { heShown = !heShown; $(".herules", el).hidden = !heShown; el.dataset.state = heShown ? "hebrew" : "rules"; }
   function roles() { const [a, b] = half ? ["B", "A"] : ["A", "B"]; $(".roles", el).innerHTML = `<span class="role"><i class="${a}">${a}</i>picks</span><span class="role"><i class="${b}">${b}</i>asks</span>`; }
+  // the timer is a snake: the head slides left → right, the body (a wave, tapering to the tail) grows behind it
   function place(h, p) {
-    const t = $$(".track", el)[h]; if (!t) return; const mk = $(".mk", t), end = t.clientWidth - mk.offsetWidth - 8, x = 8 + Math.max(0, end - 8) * p;
-    mk.style.left = x.toFixed(1) + "px"; $(".fill", t).style.width = (x + mk.offsetWidth / 2).toFixed(1) + "px";
+    const t = $$(".track", el)[h]; if (!t) return; const mk = $(".mk", t), W = t.clientWidth, Ht = t.clientHeight, end = W - mk.offsetWidth - 8, x = 8 + Math.max(0, end - 8) * p;
+    mk.style.left = x.toFixed(1) + "px";
+    const sv = $(".body", t), x0 = 10, xe = x + mk.offsetWidth * .4, mid = Ht / 2, A = Ht * .12, bw = Ht * .44, lam = Ht * 2.4;
+    sv.setAttribute("viewBox", `0 0 ${W} ${Ht}`);
+    if (xe - x0 < 6) { sv.innerHTML = ""; return; }
+    const y = s => mid + A * Math.sin(2 * Math.PI * (s - xe) / lam), w = s => bw * Math.min(1, .15 + (s - x0) / (Ht * 1.6)), top = [], bot = [], dots = [];
+    for (let s = x0; ; s = Math.min(xe, s + 6)) { top.push(`${s.toFixed(1)},${(y(s) - w(s) / 2).toFixed(1)}`); bot.unshift(`${s.toFixed(1)},${(y(s) + w(s) / 2).toFixed(1)}`); if (s >= xe) break; }
+    for (let s = xe - Ht * .7; s > x0 + Ht * .5; s -= Ht * .55) dots.push(`<circle cx="${s.toFixed(1)}" cy="${y(s).toFixed(1)}" r="${(w(s) * .17).toFixed(1)}"/>`);
+    sv.innerHTML = `<polygon points="${top.join(" ")} ${bot.join(" ")}" fill="${P.green}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><g fill="${P.belly}">${dots.join("")}</g>`;
   }
   function newTimer() {
     roles(); $$(".track", el).forEach((t, k) => t.classList.toggle("now", k === half));
@@ -1411,9 +1294,9 @@ GAMES.mime = (el, sc) => {
   addEventListener("resize", onResize);
   render();
   return {
-    keys: "Rules: Enter or tap בעברית?: the Hebrew check · Game: Space start / pause the timer · Enter: swap now · tap a picture or a prompt: hear it",
+    keys: [["Space", "start / pause"], ["Enter", "swap now"], ["H", "Hebrew"]],
     onKey(k) {
-      if (step === 0 && k === "Enter") return toggleHe(), true;
+      if (step === 0 && (k === "h" || k === "H")) return toggleHe(), true;
       if (step === 1 && k === " ") return toggle(), true;
       if (step === 1 && k === "Enter") return swapNow(), true;
       if (k === "ArrowRight" && step === 0) { step = 1; render(); return true; }
@@ -1423,7 +1306,7 @@ GAMES.mime = (el, sc) => {
   };
 };
 
-/* 14. Snake chain: the snake grows one picture per row; What did we learn today?; all ticked; bye-bye */
+/* 12. Snake chain: the snake grows one picture per row (C: a new row starts again); What did we learn today?; all ticked; bye-bye */
 let ALL_DONE = false;
 GAMES.chain = (el, sc) => {
   let added = [], step = 0, ticks = 0, answered = false;
@@ -1463,6 +1346,8 @@ GAMES.chain = (el, sc) => {
     }
     return false;
   }
+  // C: a new row starts the snake again (each row says all the words)
+  function reset() { if (step !== 0 || !added.length) return true; added = []; render(); SFX.whoosh(); return true; }
   function back() {
     if (step === 2) { step = 1; render(); return true; }
     if (step === 1) { step = 0; render(); return true; }
@@ -1471,8 +1356,8 @@ GAMES.chain = (el, sc) => {
   }
   render();
   return {
-    keys: "Space or →: add the next S word (or tap a word) · then: the answer, the ticks, goodbye",
-    onKey(k) { if (isGo(k) || k === "ArrowRight") return forward(); if (k === "ArrowLeft") return back(); },
+    keys: [["Space", "next word"], ["C", "new row"]],
+    onKey(k) { if (k === "c" || k === "C") return reset(); if (isGo(k) || k === "ArrowRight") return forward(); if (k === "ArrowLeft") return back(); },
     stop() { ALL_DONE = false; }
   };
 };
@@ -1481,27 +1366,22 @@ GAMES.chain = (el, sc) => {
    SHELL: top bar, agenda, menu, keys
    ===================================================================== */
 const screenEl = $("#screen");
-let cur = 0, ctrl = {}, scope = null, first = true;
+let cur = 0, ctrl = {}, scope = null;
 function topAgenda() {
   const ag = STAGES[cur].ag;
   $$("#agenda .agi").forEach((b, k) => { b.classList.toggle("done", ALL_DONE || k < ag); b.classList.toggle("cur", !ALL_DONE && k === ag); });
-}
-function stamp() {
-  const tx = $("#tx");
-  tx.innerHTML = `<div class="txc stop">${ICON.palm}<span>Stop!</span></div><div class="txc look">${ICON.eye}<span>Look!</span></div>`;
-  clearTimeout(stamp.t); stamp.t = setTimeout(() => tx.innerHTML = "", 1400 * SPEED + 100);
 }
 function go(i) {
   i = Math.max(0, Math.min(STAGES.length - 1, i));
   if (ctrl.stop) ctrl.stop(); if (scope) scope.stop();
   hush(); $$(".swapban,.eyes").forEach(x => x.remove());
-  if (!first && i !== cur) stamp();
-  first = false; cur = i; ALL_DONE = false;
+  cur = i; ALL_DONE = false;
   const st = STAGES[i];
   scope = makeScope();
   screenEl.innerHTML = ""; screenEl.className = "g-" + st.game; for (const k of Object.keys(screenEl.dataset)) delete screenEl.dataset[k];
   screenEl.dataset.game = st.game; screenEl.dataset.stage = i + 1;
   ctrl = GAMES[st.game](screenEl, scope, st) || {};
+  $("#legend").innerHTML = [...(ctrl.keys || []), ["PgDn", "next part"]].map(([key, what]) => `<span><span class="kbd">${key}</span> ${what}</span>`).join("");
   $("#stNum").textContent = i + 1;
   $("#stName").textContent = curly(st.name);
   topAgenda();
@@ -1513,27 +1393,29 @@ const prevStage = () => { if (cur > 0) go(cur - 1); };
 
 $("#logo").innerHTML = LOGO;
 $("#menuBtn").innerHTML = ICON.menu; $("#prevBtn").innerHTML = ICON.prev; $("#nextBtn").innerHTML = ICON.next; $("#fsBtn").innerHTML = ICON.fs; $("#closeMenu").innerHTML = ICON.close;
-// the top-bar arrows act like the keys: items first, then the stage
-$("#prevBtn").onclick = () => { if (!(ctrl.onKey && ctrl.onKey("ArrowLeft"))) prevStage(); };
-$("#nextBtn").onclick = () => { if (!(ctrl.onKey && ctrl.onKey("ArrowRight"))) nextStage(); };
+// the top-bar arrows move between stages; the keyboard arrows move through items first
+$("#prevBtn").onclick = prevStage;
+$("#nextBtn").onclick = nextStage;
 const toggleFS = () => { if (document.fullscreenElement) document.exitFullscreen?.(); else document.documentElement.requestFullscreen?.().catch(() => {}); };
 $("#fsBtn").onclick = toggleFS;
 $("#agenda").innerHTML = LESSON.agenda.map(a => `<div class="agi" title="${a.name}" data-ag="${a.id}">${AGI[a.id]()}<i class="tk">${ICON.tick}</i></div>`).join("");
+// an agenda icon jumps to the first stage of that part (the teacher's mouse; kids never tap the top bar)
+$$("#agenda .agi").forEach((b, k) => b.onclick = () => { const s = STAGES.findIndex(x => x.ag === k); if (s >= 0) go(s); });
 const testSound = () => { SFX.ding(); setTimeout(() => speak(T.hello), 400); };
 $("#testSound").innerHTML = `${ICON.speaker} Test sound`; $("#testSound").onclick = testSound;
 $("#menuGrid").innerHTML = STAGES.map((s, k) => `<button class="mstage"><span class="n">${k + 1}</span><span><b>${curly(s.name)}</b><small>${s.net} min</small></span></button>`).join("");
 $$(".mstage").forEach((b, k) => b.onclick = () => { closeMenu(); go(k); });
 const totalNet = STAGES.reduce((t, s) => t + s.net, 0);
 $("#totalNet").textContent = totalNet;
-$("#menuKeys").innerHTML = `<span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">1</span><span class="kbd">0</span>–<span class="kbd">1</span><span class="kbd">4</span> jump to a stage · <span class="kbd">←</span> <span class="kbd">→</span> items, then the stage · <span class="kbd">Space</span> <span class="kbd">Enter</span> show / play · <span class="kbd">R</span> say it again · <span class="kbd">F</span> full screen · <span class="kbd">M</span> this menu`;
-$("#clockRule").innerHTML = `${ICON.clock.replace("<svg", '<svg style="width:1.1em;height:1.1em;display:inline;vertical-align:-.2em"')} The pair game (13) starts at least 8 minutes before the bell. Running late? See the plan.`;
+$("#menuKeys").innerHTML = `<span class="kbd">1</span>–<span class="kbd">9</span>, <span class="kbd">1</span><span class="kbd">0</span>–<span class="kbd">1</span><span class="kbd">${STAGES.length % 10}</span> jump to a stage · <span class="kbd">PgUp</span> <span class="kbd">PgDn</span> or the top-bar arrows: the stage · <span class="kbd">←</span> <span class="kbd">→</span> items, then the stage · <span class="kbd">Space</span> show / play · <span class="kbd">R</span> say it again · <span class="kbd">F</span> full screen · <span class="kbd">M</span> this menu`;
+$("#clockRule").innerHTML = `${ICON.clock.replace("<svg", '<svg style="width:1.1em;height:1.1em;display:inline;vertical-align:-.2em"')} The pair game (${STAGES.findIndex(s => s.game === "mime") + 1}) starts at least 8 minutes before the bell. Running late? See the plan.`;
 const menuEl = $("#menu");
 const openMenu = () => { menuEl.hidden = false; }, closeMenu = () => { menuEl.hidden = true; };
 $("#menuBtn").onclick = () => menuEl.hidden ? openMenu() : closeMenu();
 $("#closeMenu").onclick = closeMenu;
 menuEl.onclick = e => { if (e.target === menuEl) closeMenu(); };
 
-// keyboard: 1–14 (two digits for 10–14), arrows, Space / Enter; PageUp / PageDown do nothing
+// keyboard: 1–12 (two digits for 10–12), PageUp / PageDown = stage, arrows, Space / Enter
 let dbuf = "", dtimer = null;
 function digit(d) {
   clearTimeout(dtimer);
@@ -1551,6 +1433,7 @@ addEventListener("keydown", e => {
   if (k === "m" || k === "M") return menuEl.hidden ? openMenu() : closeMenu();
   if (k === "Escape") return closeMenu();
   if (/^[0-9]$/.test(k)) return digit(k);
+  if (k === "PageDown" || k === "PageUp") { closeMenu(); return k === "PageDown" ? nextStage() : prevStage(); }
   if (!menuEl.hidden) return;
   if (ctrl.onKey && ctrl.onKey(k, e)) return;
   if (k === "ArrowRight") return nextStage();

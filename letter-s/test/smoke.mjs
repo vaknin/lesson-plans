@@ -28,11 +28,11 @@ function headlessShell() {
   return undefined;
 }
 
-// notes/lesson-design.md: the 14 stages [name, net min, LP min] and the 22 voice lines
+// notes/lesson-design.md: the 12 stages [name, net min, LP min] and the 22 voice lines
 const PLAN_STAGES = [
   ['Good morning', 1, 2], ['Snake reveal', 1, 2], ["Sam's story: meet the words", 3.5, 4], ['Stop me when…', 2, 3],
-  ["What's missing?", 2, 3], ['Read with me', 1.5, 2], ['Which word?', 2, 3], ['Build the word', 2, 2],
-  ['Is it a…?', 2, 3], ['Hiss when you hear S!', 2, 2], ['Peek!', 2, 3], ['Read and match', 2, 3],
+  ["What's missing?", 2, 3], ['Read with me', 1.5, 2], ['Which word?', 2, 3],
+  ['Is it a…?', 2, 3], ['Hiss when you hear S!', 2, 2], ['Peek!', 2, 3],
   ['Guess my mime (pairs)', 5, 5], ['Snake chain', 2, 3]
 ];
 const PLAN_LINES = [
@@ -41,7 +41,7 @@ const PLAN_LINES = [
   'Yes, it is!', "No, it isn't!", "It's a snake.", "It's a star.", "It's a school.",
   "Hello, class! Let's learn the letter S.", 'Today, the letter S, like snake!', 'What is it?', "What's missing?", 'Great job! Bye-bye, S words!'
 ];
-const PRAISE_N = 14;
+const PRAISE_N = 12;
 
 let failures = 0; const warnings = [], spokenAll = [], missesAll = [];
 const fail = m => { failures++; console.log('  FAIL', m); };
@@ -51,7 +51,6 @@ const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g
 
 // static checks on the source
 const SRC = readFileSync(path.join(root, 'index.html'), 'utf8');
-ok(!/["']Page(Up|Down)["']\s*\)/.test(SRC.replace(/\[[^\]]*"PageUp"[^\]]*\]\.includes\(k\)/, '')) && !/k\s*===\s*["']Page(Up|Down)/.test(SRC), 'a PageUp/PageDown handler exists (clicker duplicates)');
 ok(!/getUserMedia|SpeechRecognition/.test(SRC), 'microphone / speech recognition code in index.html');
 ok(!/<img\b|\.jpe?g|\.png|\.webp/i.test(SRC.replace(/\/\* CLIPS:BEGIN[\s\S]*?CLIPS:END \*\//, '').replace(/\/\* FONTS:BEGIN[\s\S]*?FONTS:END \*\//, '')), 'raster images in index.html (inline SVG only)');
 
@@ -105,7 +104,7 @@ async function audit(name) {
     const out = [], W = innerWidth, Hh = innerHeight;
     const vis = el => el.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && el.getBoundingClientRect().width > 0;
     const lbl = el => (el.getAttribute('aria-label') || el.textContent.trim() || el.className).slice(0, 30);
-    const onTop = b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; if (x < 0 || y < 0 || x > W || y > Hh) return true; const e = document.elementFromPoint(x, y), ov = e && e.closest('#menu,.eyes,.swapban,#tx'); return !ov || ov.contains(b); };
+    const onTop = b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; if (x < 0 || y < 0 || x > W || y > Hh) return true; const e = document.elementFromPoint(x, y), ov = e && e.closest('#menu,.eyes,.swapban'); return !ov || ov.contains(b); };
     const btns = [...document.querySelectorAll('button')].filter(vis).filter(onTop);
     for (const b of btns) {
       const r = b.getBoundingClientRect();
@@ -130,7 +129,7 @@ async function audit(name) {
       if (vis(p)) { const s = p.querySelector('svg'), q = s && s.getBoundingClientRect(); if (!q || q.width < 20 || q.height < 20) out.push(`picture "${id}" is empty or squashed`); }
     }
     // nothing readable spills off the screen
-    for (const el of document.querySelectorAll('#screen .he,#screen .bub,#screen .card,#screen .pcard,#screen .btn,.track,.chain,.bank,#agenda,#stageTitle,.bye h1,.tiles,.slots,.wopts,.grid6,.tiles6,.chunk,.strip')) {
+    for (const el of document.querySelectorAll('#screen .he,#screen .bub,#screen .card,#screen .pcard,#screen .btn,.track,.chain,.bank,#agenda,#stageTitle,.bye h1,.wopts,.grid6,.tiles6,#legend')) {
       if (!vis(el) || el.closest('.cover,.segs')) continue;
       const r = el.getBoundingClientRect();
       if (r.left < -1 || r.right > W + 1 || r.top < -1 || r.bottom > Hh + 1) out.push(`"${el.className || el.id}" spills off screen (${r.left.toFixed(0)},${r.top.toFixed(0)} – ${r.right.toFixed(0)},${r.bottom.toFixed(0)})`);
@@ -155,7 +154,6 @@ async function shot(label) {
   await page.evaluate(() => Promise.race([
     Promise.all(document.getAnimations().filter(a => a.effect?.getComputedTiming().iterations !== Infinity && !a.effect?.target?.closest?.('#confetti,.track,.burst,.swapban')).map(a => a.finished.catch(() => {}))),
     new Promise(r => setTimeout(r, 1500))]));
-  await page.waitForFunction(() => !document.querySelector('#tx')?.innerHTML, null, { timeout: 3000 }).catch(() => {});
   await audit(name);
   await page.screenshot({ path: path.join(SHOTS, name + '.png') });
   shotN++; shotMs += Date.now() - t0;
@@ -173,7 +171,7 @@ async function rightToNextStage(st) {
   ok((await ds()).stage === String(st + 1), `ArrowRight at the end of stage ${st} did not open stage ${st + 1}`);
 }
 
-// ---------- the walk through all 14 stages (used at 1366×768 and again at 1920×1080) ----------
+// ---------- the walk through all 12 stages (used at 1366×768 and again at 1920×1080) ----------
 async function walk(full) {
   // 1 Good morning
   await load(1); await shot();
@@ -202,26 +200,37 @@ async function walk(full) {
   }
   await rightToNextStage(3);
 
-  // 4 Stop me when…
+  // 4 Stop me when…: an ear, never the target picture; the voice only on Space / Enter; S = STOP
   await load(4);
   { const d = await ds(); ok(d.round === '0' && d.state === 'ready', 'stop me: not ready at round 1'); }
-  ok(await count('.stopme .hint') === 1, 'stop me: round 1 has no hint'); await shot('ready');
+  ok(await count('.stopme .hint .pic,.stopme .pcard') === 0, 'stop me: the target picture shows before the run');
+  ok(await page.evaluate(() => window.__spoken.length) === 0, 'stop me: the word played by itself'); await shot('ready');
+  await key(' '); ok(await page.evaluate(t => window.__spoken.at(-1) === t, (await ds()).target), 'stop me: Space did not play the word');
+  await key('Enter'); ok(await page.evaluate(() => window.__spoken.length) === 2 && !(await ds()).burst, 'stop me: Enter did not play the word (or fired STOP)');
+  // fast presses run past the end of the shuffled run: it must keep going, never crash
+  for (let n = 0; n < 45; n++) await key('ArrowLeft', 4);
+  await sleep(200); ok((await ds()).item === '44', `stop me: 45 fast presses ended at item ${(await ds()).item}`);
   for (let r = 0; r < 5; r++) {
     let guard = 0;
     for (;;) {
-      await key('ArrowLeft', 90);
       const cur = await page.evaluate(() => document.querySelector('.stopme .pcard.big')?.dataset.word);
       if (cur === (await ds()).target || ++guard > 40) break;
+      await key('ArrowLeft', 90);
     }
     ok(guard <= 40, 'stop me: the target never came');
+    ok(await count('.stopme .hint') === 1 && await count('.stopme .hint .pic') === 0, `stop me: round ${r + 1} has no ear cue (or shows the picture)`);
     if (r <= 1 || full) await shot(`round-${r + 1}-target`);
     const b0 = +((await ds()).burst || 0);
-    await key(' '); ok(+((await ds()).burst || 0) === b0, 'stop me: Space fired the STOP burst (only S / Enter should)');
-    await key(r % 2 ? 'Enter' : 's', 60);
+    await key(' '); ok(+((await ds()).burst || 0) === b0, 'stop me: Space fired the STOP burst (only S should)');
+    await key('s', 60);
     if (r === 0) await page.screenshot({ path: path.join(SHOTS, '04-stopme-burst.png') });
+    if (r === 2) {   // STOP and straight on: the late "stopped" redraw must not land on the next round
+      await key('ArrowLeft', 1000); const d = await ds();
+      ok(d.round === '3' && d.state === 'ready', `stop me: S then ← at once left round ${d.round} in state ${d.state}`);
+      continue;
+    }
     await waitFor(() => document.querySelector('#screen').dataset.state === 'stopped', 'the STOP to land');
     if (r === 0) await shot('stopped');
-    if (r === 1) ok(await count('.stopme .hint') === 0, 'stop me: later rounds still show the hint');
     if (r < 4) { await key('ArrowLeft', 150); ok((await ds()).round === String(r + 1), 'stop me: ← after the target did not start the next round'); }
   }
   await rightToNextStage(4);
@@ -259,34 +268,15 @@ async function walk(full) {
     if (i >= 4) ok(await count('.wopt.sel .pointer') === 1, 'which: the silent item has no pointing hand');
     await shot(i >= 4 ? 'silent' : 'voice');
     await key(' ', 200); ok((await ds()).state === 'revealed', 'which: Space did not show the answer');
+    ok(await page.evaluate(() => [...document.querySelectorAll('.wopt .num')].map(n => n.textContent).join() === '1,2,3'), 'which: the options are not numbered 1, 2, 3');
     ok(await page.evaluate(() => document.querySelector('.wopt.right')?.dataset.word === document.querySelector('#screen').dataset.target), 'which: the wrong word is marked right');
     if (i === 0 || i === 4 || full) await shot('answer');
     if (i < 5) await right('which ' + i);
   }
   await rightToNextStage(7);
 
-  // 8 Build the word
+  // 8 Is it a…?: no voice at all, only the pupils speak
   await load(8);
-  for (let i = 0; i < 3; i++) {
-    await shot();
-    const w = (await ds()).word;
-    const extra = await page.evaluate(w => [...document.querySelectorAll('.tiles .tile')].find(b => !w.includes(b.dataset.c))?.dataset.k, w);
-    const wr0 = +((await ds()).wrong || 0);
-    await tap(`.tiles .tile[data-k="${extra}"]`); ok(+((await ds()).wrong || 0) === wr0 + 1 && await count('.slots .slot1.f') === 0, 'build: a wrong letter was not refused');
-    for (let n = 0; n < w.length; n++) {
-      if (n === 1) { await key(' '); continue; }   // Space places the next letter
-      const k = await page.evaluate(([w, n]) => [...document.querySelectorAll('.tiles .tile:not(.used)')].find(b => b.dataset.c === w[n]).dataset.k, [w, n]);
-      await tap(`.tiles .tile[data-k="${k}"]`);
-      if (n === 1 && i === 0) await shot('half');
-    }
-    ok((await ds()).state === 'done', `build: "${w}" not finished`);
-    await shot('done');
-    if (i < 2) await right('build ' + i);
-  }
-  await rightToNextStage(8);
-
-  // 9 Is it a…?
-  await load(9);
   for (let i = 0; i < 6; i++) {
     if (i <= 1 || full) await shot('asked');
     await key(' ', 160);
@@ -296,10 +286,11 @@ async function walk(full) {
     if (i === 0) { const l = d.left; await key('Enter', 300); ok((await ds()).left !== l, 'is it: Enter did not swap the halves'); await shot('swapped'); }
     if (i < 5) await right('isit ' + i);
   }
-  await rightToNextStage(9);
+  await sleep(600); ok(await page.evaluate(() => window.__spoken.length) === 0, 'is it: a voice played');
+  await rightToNextStage(8);
 
-  // 10 Hiss when you hear S!
-  await load(10);
+  // 9 Hiss when you hear S!
+  await load(9);
   for (let i = 0; i < 7; i++) {
     await shot();
     ok(await count('#screen .hw') === 0, 'hiss: the S words are highlighted (they must not be)');
@@ -307,10 +298,10 @@ async function walk(full) {
     if (i === 0) await shot('hissed');
     if (i < 6) await right('hiss ' + i);
   }
-  await rightToNextStage(10);
+  await rightToNextStage(9);
 
-  // 11 Peek!
-  await load(11);
+  // 10 Peek!
+  await load(10);
   for (let i = 0; i < 6; i++) {
     if (i === 0 || full) await shot('covered');
     await key(' ');
@@ -323,40 +314,24 @@ async function walk(full) {
     if (i <= 1 || full) await shot('revealed');
     if (i < 5) await right('peek ' + i);
   }
-  await rightToNextStage(11);
+  await rightToNextStage(10);
 
-  // 12 Read and match
-  await load(12);
-  for (let i = 0; i < 3; i++) { await shot('echo'); await key(' ', 200); if (i === 0) await shot('echo-read'); await right('match ' + i); }
-  await shot('chunk'); await key(' '); await key(' '); await key(' '); await shot('chunk-lit');
-  ok(await page.evaluate(() => [...document.querySelectorAll('.chunk .bub')].every(b => b.querySelector(':scope > span'))), 'match: chunk text not wrapped (flex splits the S)');
-  await right('match 3');
-  { const d = await ds(); ok(d.state === 'a' && await count('.pics3 .pcard') === 3, 'match (a): not 3 pictures');
-    ok(await page.evaluate(() => !document.querySelector('.match .sent .hw') && !/[?]$/.test(document.querySelector('.match .sent')?.textContent.trim() || '')), 'match (a): sentence markup unexpected');
-    await shot('a');
-    await key(' ', 200); ok(await page.evaluate(a => document.querySelector('.pics3 .pcard.right')?.dataset.word === a, d.answer), 'match (a): the right picture was not shown'); await shot('a-answer'); }
-  await right('match 4');
-  await shot('b');
-  await tap('.choice[data-word="star"]'); ok((await ds()).state === 'b', 'match (b): "star" filled the gap');
-  await tap('.choice[data-word="school"]', 250); ok((await ds()).state === 'filled', 'match (b): "school" did not fill the gap');
-  await shot('b-filled');
-  await rightToNextStage(12);
-
-  // 13 Guess my mime
-  await load(13, FAST_TIMER);
+  // 11 Guess my mime
+  await load(11, FAST_TIMER);
   await shot('rules');
-  await key('Enter'); ok((await ds()).state === 'hebrew', 'mime: Enter did not show the Hebrew rules'); await shot('rules-hebrew');
-  await key('Enter'); await right('mime rules');
+  await key('h'); ok((await ds()).state === 'hebrew', 'mime: H did not show the Hebrew rules'); await shot('rules-hebrew');
+  await key('h'); await right('mime rules');
   ok(await count('.tiles6 .pcard') === 6, 'mime: not 6 pictures'); await shot('ready');
   const mk = () => page.evaluate(() => [...document.querySelectorAll('.track')].map(t => t.querySelector('.mk').getBoundingClientRect().left - t.getBoundingClientRect().left));
   const m0 = await mk();
   await key(' ');
   await sleep(1200); const m1 = await mk();
   ok(m1[0] > m0[0] + 20, `mime: the half-1 marker did not move left→right (${m0[0].toFixed(0)} → ${m1[0].toFixed(0)})`);
+  ok(await count('.track[data-half="0"] .body polygon') === 1, 'mime: no snake body behind the half-1 head');
   await key(' '); ok((await ds()).state === 'paused', 'mime: Space did not pause'); await shot('half1-running');
   await key(' ');
   await waitFor(() => document.querySelector('#screen').dataset.state === 'swap', 'the swap bell', 9000);
-  await page.screenshot({ path: path.join(SHOTS, `${prefix}13-mime-01-swap.png`) });
+  await page.screenshot({ path: path.join(SHOTS, `${prefix}11-mime-01-swap.png`) });
   await waitFor(() => document.querySelector('#screen').dataset.state === 'running' && document.querySelector('#screen').dataset.half === '1', 'half 2 to start by itself', 4000);
   await sleep(1000); const m2 = await mk();
   ok(m2[1] > m0[1] + 20 && m2[0] >= m1[0], 'mime: the half-2 marker did not move left→right');
@@ -369,21 +344,24 @@ async function walk(full) {
     ok(await page.evaluate(id => document.querySelector('#qh').dataset.say === LESSON.questions[id] && document.querySelector('#qe').textContent.toLowerCase() === id + '?', id), `mime: tapping "${id}" did not set its prompts`);
   }
   await shot('prompts-stop');
-  await rightToNextStage(13);
+  await rightToNextStage(11);
 
-  // 14 Snake chain
-  await load(14);
+  // 12 Snake chain
+  await load(12);
   await shot('empty');
   await tap('.bank .btn[data-word="star"]'); ok(await count('.segs .seg') === 1, 'chain: tapping a word did not grow the snake');
   ok(await page.evaluate(() => [...document.querySelectorAll('.bank .btn')].every(b => b.querySelector(':scope > span'))), 'chain: bank button text not wrapped (flex splits the S)');
-  for (let n = 1; n < 6; n++) { await key(' ', 140); if (n === 2) await shot('three'); }
+  for (let n = 1; n < 3; n++) await key(' ', 140);
+  await shot('three');
+  await key('c', 150); ok(await count('.segs .seg') === 0 && await count('.bank .btn:disabled') === 0, 'chain: C did not start a new row');
+  for (let n = 0; n < 6; n++) await key(' ', 140);
   ok(await count('.segs .seg') === 6, 'chain: the snake did not reach 6 words');
   await sleep(900 * FAST + 200); await shot('full');
   ok((await page.evaluate(() => window.__sfx)).includes('hiss'), 'chain: no hiss at the end');
   await key(' ', 200); await shot('learn');
   await key(' ', 200); ok((await ds()).state === 'answer', 'chain: Space did not show the answer'); await shot('answer');
-  for (let t = 1; t <= 7; t++) await key(' ', 90);
-  ok((await ds()).state === 'ticked7', 'chain: the agenda was not ticked 7 times');
+  for (let t = 1; t <= 6; t++) await key(' ', 90);
+  ok((await ds()).state === 'ticked6', 'chain: the agenda was not ticked 6 times');
   ok(await page.evaluate(() => [...document.querySelectorAll('#agenda > *')].every(a => /done/.test(a.className))), 'chain: the top agenda is not all ticked');
   await shot('ticked');
   await key(' ', 300); ok((await ds()).state === 'bye', 'chain: no goodbye'); await shot('bye');
@@ -397,8 +375,8 @@ ok(fontInfo.status === 'loaded', `document.fonts.status is ${fontInfo.status}`);
 for (const fam of ['Fredoka', 'Rubik']) ok(fontInfo.faces.some(([f, s]) => f === fam && s === 'loaded'), `${fam} not loaded (${JSON.stringify(fontInfo.faces)})`);
 const siteStages = await page.evaluate(() => STAGES.map(s => [s.name, s.net, s.lp]));
 ok(JSON.stringify(siteStages) === JSON.stringify(PLAN_STAGES), `site stages differ from the plan:\n    ${JSON.stringify(siteStages)}`);
-ok(siteStages.reduce((t, s) => t + s[1], 0) === 30, 'site net minutes do not sum to 30');
-ok(siteStages.reduce((t, s) => t + s[2], 0) === 40, 'site LP minutes do not sum to 40');
+ok(siteStages.reduce((t, s) => t + s[1], 0) === 26, 'site net minutes do not sum to 26');
+ok(siteStages.reduce((t, s) => t + s[2], 0) === 35, 'site LP minutes do not sum to 35');
 const siteLines = await page.evaluate(() => VOICE_LINES(LESSON));
 ok(JSON.stringify([...siteLines].sort()) === JSON.stringify([...PLAN_LINES].sort()), `site voice lines differ from the plan: ${JSON.stringify(siteLines)}`);
 const html = await page.evaluate(() => ({ tr: document.documentElement.getAttribute('translate'), cls: document.documentElement.className, meta: !!document.querySelector('meta[name=google][content=notranslate]'), ext: [...document.querySelectorAll('link[href],script[src],img[src]')].length }));
@@ -406,15 +384,14 @@ ok(html.tr === 'no' && /notranslate/.test(html.cls) && html.meta, 'translate="no
 ok(html.ext === 0, 'external resources linked');
 await key('9'); ok((await ds()).stage === '9', 'key 9 did not open stage 9');
 await key('1', 60); await key('2', 250); ok((await ds()).stage === '12', 'keys 1 2 did not open stage 12');
-await key('1', 60); await key('4', 250); ok((await ds()).stage === '14', 'keys 1 4 did not open stage 14');
 await key('1', 900); ok((await ds()).stage === '1', 'key 1 alone did not open stage 1');
-{ await key('3', 250); const a = await sig(); await key('PageDown'); await key('PageUp'); ok(a === await sig(), 'PageUp/PageDown changed something (no duplicate keys)'); }
-// the Stop/Look stamp on a stage change
-await key('4', 40); ok(/Stop/.test(await page.evaluate(() => document.querySelector('#tx').textContent)), 'no "Stop!" stamp on a stage change');
-await sleep(400);
-// the top-bar buttons by touch
-await key('1', 900); await tap('#nextBtn', 250); ok((await ds()).stage === '2', 'the top-bar Next did not advance');
-await tap('#prevBtn', 250); ok((await ds()).stage === '1', 'the top-bar Back did not go back');
+// PageDown / PageUp, the top-bar arrows and the agenda icons jump whole stages
+await key('3', 250); await key(' '); await key('PageDown', 250); ok((await ds()).stage === '4', 'PageDown did not open the next stage');
+await key('PageUp', 250); ok((await ds()).stage === '3', 'PageUp did not open the previous stage');
+await tap('#nextBtn', 250); ok((await ds()).stage === '4', 'the top-bar Next did not open the next stage');
+await tap('#prevBtn', 250); ok((await ds()).stage === '3', 'the top-bar Back did not open the previous stage');
+await page.click('#agenda .agi:nth-child(5)'); await sleep(250); ok((await ds()).stage === '11', 'the pair-game agenda icon did not open stage 11');
+{ const lg = await page.evaluate(() => document.querySelector('#legend').textContent); ok(/Space/.test(lg) && /PgDn/.test(lg) && !/[←→]/.test(lg), `key legend wrong: ${lg}`); }
 await key('m'); ok(await page.isVisible('#menu'), 'M did not open the menu');
 await audit('menu'); await page.screenshot({ path: path.join(SHOTS, '00-menu.png') });
 await tap('#testSound', 600);
@@ -431,12 +408,11 @@ const SP6 = Array(6).fill(' ');
 const HD = {
   1: [], 2: ['wait:asked', 'Enter', 'shot:answered', 'ArrowRight', 'ArrowRight', 'shot:goal'], 3: [' ', 'Enter', 'shot:everybody'], 4: ['ArrowLeft', 'shot:run'],
   5: [' ', ' ', 'shot:missing', ' ', 'shot:revealed'], 6: [], 7: [' ', 'shot:answer', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'shot:silent'],
-  8: [' ', ' ', 'shot:half'], 9: [' ', 'shot:answered'], 10: [' ', 'shot:hissed'], 11: ['Enter', 'shot:revealed'],
-  12: ['ArrowRight', 'ArrowRight', 'ArrowRight', 'shot:chunk', 'ArrowRight', 'shot:a', 'ArrowRight', 'shot:b'],
-  13: ['Enter', 'shot:hebrew', 'ArrowRight', 'shot:game'],
-  14: [...SP6, 'shot:full', ' ', ' ', 'shot:answer', ...SP6, ' ', ' ', 'shot:bye']
+  8: [' ', 'shot:answered'], 9: [' ', 'shot:hissed'], 10: ['Enter', 'shot:revealed'],
+  11: ['h', 'shot:hebrew', 'ArrowRight', 'shot:game'],
+  12: [...SP6, 'shot:full', ' ', ' ', 'shot:answer', ...SP6, ' ', 'shot:bye']
 };
-for (let s = 1; s <= 14; s++) {
+for (let s = 1; s <= 12; s++) {
   await load(s); await shot();
   for (const st of HD[s]) {
     if (st.startsWith('shot:')) await shot(st.slice(5));
@@ -468,10 +444,10 @@ const plan = await page.evaluate(() => ({
 ok(JSON.stringify(plan.rows) === JSON.stringify(PLAN_STAGES), `plan.html stage cards differ from the plan:\n    ${JSON.stringify(plan.rows)}`);
 ok(JSON.stringify(plan.timeline) === JSON.stringify(PLAN_STAGES), `plan.html timeline differs from the plan:\n    ${JSON.stringify(plan.timeline)}`);
 ok(plan.praise === PRAISE_N, `plan.html: ${plan.praise} praise lines (want one per stage)`);
-ok(plan.tx === 13, `plan.html: ${plan.tx} transition lines (want 13)`);
+ok(plan.tx === 11, `plan.html: ${plan.tx} transition lines (want 11)`);
 plan.per.forEach((p, k) => ok(p, `plan.html stage ${k + 1}: missing a section (teacher / kids / rest / easier-harder / praise / interaction)`));
 ok(/recognise and say 6 words that begin with S/.test(plan.objective), 'plan.html: objective missing');
-ok(plan.late === 5 && plan.clock, 'plan.html: running-late list or clock rule missing');
+ok(plan.late === 3 && plan.clock, 'plan.html: running-late list or clock rule missing');
 ok(plan.fix, 'plan.html: the "Is it scissors?" fix is missing');
 ok(plan.tr === 'no', 'plan.html: translate="no" missing');
 ok(!plan.emoji, 'plan.html: emoji');
@@ -480,8 +456,8 @@ ok(plan.status === 'loaded' && ['Fredoka', 'Rubik'].every(f => plan.faces.some((
 await page.screenshot({ path: path.join(SHOTS, 'plan-top.png') });
 await page.evaluate(() => document.querySelector('#s3').scrollIntoView({ behavior: 'instant' })); await sleep(200);
 await page.screenshot({ path: path.join(SHOTS, 'plan-stage3.png') });
-await page.evaluate(() => document.querySelector('#s13').scrollIntoView({ behavior: 'instant' })); await sleep(200);
-await page.screenshot({ path: path.join(SHOTS, 'plan-stage13.png') });
+await page.evaluate(() => document.querySelector('#s11').scrollIntoView({ behavior: 'instant' })); await sleep(200);
+await page.screenshot({ path: path.join(SHOTS, 'plan-stage11.png') });
 await page.screenshot({ path: path.join(SHOTS, 'plan-full.png'), fullPage: true });
 
 // ---------- result ----------
