@@ -1,0 +1,354 @@
+{
+ "snake": {
+  "boy": {
+   "file": "boy/snake.mp3",
+   "ok": true,
+   "heard": "Snake.",
+   "seed": 1,
+   "secs": 9
+  },
+  "girl": {
+   "file": "girl/snake.mp3",
+   "ok": true,
+   "heard": "Snake.",
+   "seed": 1,
+   "secs": 7
+  }
+ },
+ "scissors": {
+  "boy": {
+   "file": "boy/scissors.mp3",
+   "ok": true,
+   "heard": "Scissors",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/scissors.mp3",
+   "ok": true,
+   "heard": "scissors",
+   "seed": 1,
+   "secs": 8
+  }
+ },
+ "star": {
+  "boy": {
+   "file": "boy/star.mp3",
+   "ok": true,
+   "heard": "Star!",
+   "seed": 1,
+   "secs": 8
+  },
+  "girl": {
+   "file": "girl/star.mp3",
+   "ok": true,
+   "heard": "Star!",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "sad": {
+  "boy": {
+   "file": "boy/sad.mp3",
+   "ok": true,
+   "heard": "Sad.",
+   "seed": 1,
+   "secs": 8
+  },
+  "girl": {
+   "file": "girl/sad.mp3",
+   "ok": true,
+   "heard": "sad.",
+   "seed": 2,
+   "secs": 15
+  }
+ },
+ "school": {
+  "boy": {
+   "file": "boy/school.mp3",
+   "ok": true,
+   "heard": "School.",
+   "seed": 2,
+   "secs": 16
+  },
+  "girl": {
+   "file": "girl/school.mp3",
+   "ok": true,
+   "heard": "School!",
+   "seed": 2,
+   "secs": 15
+  }
+ },
+ "stop": {
+  "boy": {
+   "file": "boy/stop.mp3",
+   "ok": true,
+   "heard": "Stop!",
+   "seed": 2,
+   "secs": 15
+  },
+  "girl": {
+   "file": "girl/stop.mp3",
+   "ok": true,
+   "heard": "Stop.",
+   "seed": 2,
+   "secs": 17
+  }
+ },
+ "Is it a snake?": {
+  "boy": {
+   "file": "boy/is-it-a-snake.mp3",
+   "ok": true,
+   "heard": "Is it a snake?",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/is-it-a-snake.mp3",
+   "ok": true,
+   "heard": "Is it a snake?",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "Is it scissors?": {
+  "boy": {
+   "file": "boy/is-it-scissors.mp3",
+   "ok": true,
+   "heard": "Is it scissors?",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/is-it-scissors.mp3",
+   "ok": true,
+   "heard": "Is it scissors?",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "Is it a star?": {
+  "boy": {
+   "file": "boy/is-it-a-star.mp3",
+   "ok": true,
+   "heard": "Is it a star?",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/is-it-a-star.mp3",
+   "ok": true,
+   "heard": "Is it a star?",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "Is it sad?": {
+  "boy": {
+   "file": "boy/is-it-sad.mp3",
+   "ok": true,
+   "heard": "Is it sad?",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/is-it-sad.mp3",
+   "ok": true,
+   "heard": "Is it sad?",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "Is it a school?": {
+  "boy": {
+   "file": "boy/is-it-a-school.mp3",
+   "ok": true,
+   "heard": "Is it a school?",
+   "seed": 1,
+   "secs": 9
+  },
+  "girl": {
+   "file": "girl/is-it-a-school.mp3",
+   "ok": true,
+   "heard": "Is it a school?",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "Is it stop?": {
+  "boy": {
+   "file": "boy/is-it-stop.mp3",
+   "ok": true,
+   "heard": "Is it stop?",
+   "seed": 1,
+   "secs": 9
+  },
+  "girl": {
+   "file": "girl/is-it-stop.mp3",
+   "ok": true,
+   "heard": "Is it stop?",
+   "seed": 3,
+   "secs": 27
+  }
+ },
+ "Yes, it is!": {
+  "boy": {
+   "file": "boy/yes-it-is.mp3",
+   "ok": true,
+   "heard": "Yes, it is.",
+   "seed": 1,
+   "secs": 12
+  },
+  "girl": {
+   "file": "girl/yes-it-is.mp3",
+   "ok": true,
+   "heard": "Yes, it is!",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "No, it isn't!": {
+  "boy": {
+   "file": "boy/no-it-isn-t.mp3",
+   "ok": true,
+   "heard": "No, it isn't",
+   "seed": 1,
+   "secs": 11
+  },
+  "girl": {
+   "file": "girl/no-it-isn-t.mp3",
+   "ok": true,
+   "heard": "No, it isn't.",
+   "seed": 1,
+   "secs": 10
+  }
+ },
+ "It's a snake.": {
+  "boy": {
+   "file": "boy/it-s-a-snake.mp3",
+   "ok": true,
+   "heard": "It's a snake.",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/it-s-a-snake.mp3",
+   "ok": true,
+   "heard": "It's a snake.",
+   "seed": 1,
+   "secs": 8
+  }
+ },
+ "It's a star.": {
+  "boy": {
+   "file": "boy/it-s-a-star.mp3",
+   "ok": true,
+   "heard": "It's a star!",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/it-s-a-star.mp3",
+   "ok": true,
+   "heard": "It's a star!",
+   "seed": 1,
+   "secs": 9
+  }
+ },
+ "It's a school.": {
+  "boy": {
+   "file": "boy/it-s-a-school.mp3",
+   "ok": true,
+   "heard": "It's a school!",
+   "seed": 1,
+   "secs": 10
+  },
+  "girl": {
+   "file": "girl/it-s-a-school.mp3",
+   "ok": true,
+   "heard": "It's a school.",
+   "seed": 1,
+   "secs": 8
+  }
+ },
+ "Hello, class! Let's learn the letter S.": {
+  "boy": {
+   "file": "boy/hello-class-let-s-learn-the-letter-s.mp3",
+   "ok": true,
+   "heard": "Hello, class! Let's learn the letter S!",
+   "seed": 1,
+   "secs": 16
+  },
+  "girl": {
+   "file": "girl/hello-class-let-s-learn-the-letter-s.mp3",
+   "ok": true,
+   "heard": "Hello, class! Let's learn the letter S!",
+   "seed": 1,
+   "secs": 16
+  }
+ },
+ "Today, the letter S, like snake!": {
+  "boy": {
+   "file": "boy/today-the-letter-s-like-snake.mp3",
+   "ok": true,
+   "heard": "Today, the letter S, like snake.",
+   "seed": 1,
+   "secs": 26
+  },
+  "girl": {
+   "file": "girl/today-the-letter-s-like-snake.mp3",
+   "ok": true,
+   "heard": "Today the letter S, like snake.",
+   "seed": 1,
+   "secs": 96
+  }
+ },
+ "What is it?": {
+  "boy": {
+   "file": "boy/what-is-it.mp3",
+   "ok": true,
+   "heard": "What is it?",
+   "seed": 1,
+   "secs": 47
+  },
+  "girl": {
+   "file": "girl/what-is-it.mp3",
+   "ok": true,
+   "heard": "What is it?",
+   "seed": 1,
+   "secs": 31
+  }
+ },
+ "What's missing?": {
+  "boy": {
+   "file": "boy/what-s-missing.mp3",
+   "ok": true,
+   "heard": "What's missing?",
+   "seed": 1,
+   "secs": 64
+  },
+  "girl": {
+   "file": "girl/what-s-missing.mp3",
+   "ok": true,
+   "heard": "What's missing?",
+   "seed": 1,
+   "secs": 61
+  }
+ },
+ "Great job! Bye-bye, S words!": {
+  "boy": {
+   "file": "boy/great-job-bye-bye-s-words.mp3",
+   "ok": true,
+   "heard": "Great job! Bye-bye! S-words.",
+   "seed": 2,
+   "secs": 148
+  },
+  "girl": {
+   "file": "girl/great-job-bye-bye-s-words.mp3",
+   "ok": true,
+   "heard": "Great job, bye-bye, S words.",
+   "seed": 1,
+   "secs": 44
+  }
+ }
+}
