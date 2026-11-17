@@ -341,7 +341,7 @@ svg{display:block}
 .mfoot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:2vh}
 .mkeys{font-size:clamp(15px,2.2vh,20px);color:var(--ink2);line-height:1.7;margin:2vh 0 0}
 .kbd{display:inline-block;min-width:1.6em;padding:0 .4em;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 2px var(--line2);text-align:center;font-weight:600;color:var(--ink)}
-#legend{position:fixed;left:12px;bottom:6px;z-index:6;display:flex;gap:14px;font-size:13px;color:var(--ink2);opacity:.6;pointer-events:none}
+#legend{position:fixed;left:12px;bottom:6px;z-index:6;display:flex;gap:14px;font-size:14px;color:var(--ink2);opacity:.75;pointer-events:none}
 #legend .kbd{font-size:12px;padding:0 .35em;margin-right:.2em}
 #legend .off{opacity:.4;text-decoration:line-through}
 #legend.nudge{opacity:1;animation:nudge .45s}
@@ -1072,7 +1072,7 @@ GAMES.missing = (el, sc) => {
     if (phase === "look") { phase = "closed"; SFX.whoosh(); }
     else if (phase === "closed") { phase = "open"; render(); speak(T.whatsMissing); return; }
     else if (phase === "open") { phase = "revealed"; render(); SFX.pop(); speak(rounds[r]); confettiAt($(".pcard.ring", el), 40); return; }
-    else if (phase === "revealed") { const m = LESSON.itsA[rounds[r]]; if (m) speak(m); return; }
+    else if (phase === "revealed") { speak(LESSON.itsA[rounds[r]] || rounds[r]); return; }
     render();
   }
   render();
@@ -1301,23 +1301,23 @@ GAMES.mime = (el, sc) => {
   }
   function banner(txt, icon) { const b = document.createElement("div"); b.className = "swapban"; b.innerHTML = `<div class="in">${icon}<b>${txt}</b></div>`; el.appendChild(b); sc.after(2600, () => b.remove()); }
   function endHalf() {
-    if (half === 0) { SFX.bell(); banner("Swap!", ICON.swap); half = 1; newTimer(); el.dataset.state = "swap"; sc.after(3000, () => { if (half === 1 && !timer.running && !timer.ended) { timer.toggle(); el.dataset.state = "running"; } }); }
+    if (half === 0) { SFX.bell(); banner("Swap!", ICON.swap); half = 1; newTimer(); el.dataset.state = "swap"; const t = timer; sc.after(3000, () => { if (timer === t && !t.running && !t.ended) { t.toggle(); el.dataset.state = "running"; } }); }
     else { SFX.chime(); banner("Time’s up!", ICON.flag); el.dataset.state = "done"; }
   }
   function toggle() { if (!timer || timer.ended) return false; timer.toggle(); el.dataset.state = timer.running ? "running" : "paused"; return true; }
-  function swapNow() { if (half !== 0 || !timer || timer.ended) return false; timer.finish(); return true; }
+  function swapNow() { if (half !== 0 || !timer || timer.ended || el.dataset.state === "ready") return false; timer.finish(); return true; }
   const onResize = () => { if (step === 1) { if (half === 1) place(0, 1); } };
   addEventListener("resize", onResize);
   render();
   return {
     keys: () => step === 0 ? [["Space", heShown ? "Hebrew off" : "Hebrew rules", true]]
-      : [["Space", timer && timer.running ? "pause" : "start", !!timer && !timer.ended], ["X", "swap now", half === 0 && !!timer && !timer.ended]],
+      : [["Space", timer && timer.running ? "pause" : "start", !!timer && !timer.ended], ["X", "swap now", half === 0 && !!timer && !timer.ended && el.dataset.state !== "ready"]],
     onKey(k) {
       if (step === 0 && k === " ") return toggleHe(), true;
       if (step === 1 && k === " ") return toggle();
       if (step === 1 && k === "x") return swapNow();
       if (k === "ArrowRight" && step === 0) { step = 1; render(); return true; }
-      if (k === "ArrowLeft" && step === 1) { step = 0; render(); return true; }
+      if (k === "ArrowLeft" && step === 1) { if (timer && timer.running) timer.toggle(); timer = null; step = 0; render(); return true; }
     },
     stop() { removeEventListener("resize", onResize); }
   };
@@ -1467,7 +1467,7 @@ addEventListener("keydown", e => {
   if (k === "PageDown" || k === "PageUp") { closeMenu(); return k === "PageDown" ? nextStage() : prevStage(); }
   if (!menuEl.hidden) return;
   if (k === "r") return lastSpoken ? speak(lastSpoken) : nudge("r");
-  if (ctrl.onKey && ctrl.onKey(k, e)) return drawLegend();
+  if (ctrl.onKey && ctrl.onKey(k, e)) { clearTimeout(nudgeT); $("#legend").classList.remove("nudge"); return drawLegend(); }
   if (k === "ArrowRight") return nudge("pgdn");
   if (k === " " || k === "Enter" || k === "ArrowLeft" || (ctrl.keys && ctrl.keys().some(([key]) => key.toLowerCase() === k))) nudge(k === " " ? "space" : k.length === 1 ? k : null);
 });
